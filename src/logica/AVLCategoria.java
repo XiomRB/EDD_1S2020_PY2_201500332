@@ -1,5 +1,7 @@
 package logica;
 
+import javax.swing.JOptionPane;
+
 public class AVLCategoria {
    private NodoAVL raiz;
 
@@ -15,105 +17,162 @@ public class AVLCategoria {
         this.raiz = raiz;
     }
     
-    public void insertar(String cat){
-        NodoAVL nuevo = new NodoAVL(cat);
-        if(raiz == null) raiz = nuevo;
-        else raiz = insertarNodo(nuevo, raiz);
-    }
-    
-    public void inOrden(NodoAVL root){
+    public String inOrden(NodoAVL root){
+        String dot = "";
         if(root != null){
-            inOrden(root.getIzq());
-            System.out.print(root.getCategoria() + "  ");
-            inOrden(root.getDer());
+            dot += inOrden(root.getIzq());
+            dot += "\"" + root.getCategoria() + "\" -> ";
+            dot += inOrden(root.getDer());
         }
+        return dot;
     }
     
-    public void preOrder(NodoAVL root){
+    public String preOrder(NodoAVL root){
+        String dot = "";
         if(root != null){
-            System.out.print(root.getCategoria() + "  ");
-            preOrder(root.getIzq());
-            preOrder(root.getDer());
+            dot += "\"" + root.getCategoria() + " " + root.getAltura() + "\" -> ";
+            dot += preOrder(root.getIzq());
+            dot += preOrder(root.getDer());
         }
+        return dot;
     }
     
-    public void postOrder(NodoAVL root){
+    public String postOrder(NodoAVL root){
+        String dot = "";
         if(root != null){
-            preOrder(root.getIzq());
-            preOrder(root.getDer());
-            System.out.print(root.getCategoria() + "  ");
+            dot += preOrder(root.getIzq());
+            dot += preOrder(root.getDer());
+            dot += "\"" + root.getCategoria() + "\" -> ";
         }
+        return dot;
     }
     
-    public NodoAVL insertarNodo(NodoAVL nuevo, NodoAVL sub){
-        NodoAVL nuevaraiz = sub;
-        if(nuevo.getCategoria().compareToIgnoreCase(sub.getCategoria())<0){
-            if(sub.getIzq() == null) sub.setIzq(nuevo);
-            else{ 
-                sub.setIzq(insertarNodo(nuevo, sub.getIzq()));
-                if(obtenerFE(sub.getIzq()) - obtenerFE(sub.getDer()) == 2){
-                    if(nuevo.getCategoria().compareToIgnoreCase(sub.getIzq().getCategoria())<0) nuevaraiz = rotacionIzq(sub);
-                    else nuevaraiz = dobleIzq(sub);   
-                }
-            }
-        }else if(nuevo.getCategoria().compareToIgnoreCase(sub.getCategoria())>0){
-            if(sub.getDer()== null) sub.setDer(nuevo);
-            else{
-                sub.setDer(insertarNodo(nuevo, sub.getDer()));
-                if(obtenerFE(sub.getDer()) - obtenerFE(sub.getIzq()) == 2){
-                    if(nuevo.getCategoria().compareToIgnoreCase(sub.getDer().getCategoria())>0){
-                        nuevaraiz = rotacionDer(sub);
-                    }else nuevaraiz = dobleDer(sub);
-                }
-            }
-        }
-        if((sub.getIzq()== null) && (sub.getDer()!= null))sub.setFe(sub.getDer().getFe()+1);
-        else if((sub.getDer()== null) && (sub.getIzq()!= null)) sub.setFe(sub.getIzq().getFe()+1);
-        else sub.setFe(Math.max(obtenerFE(sub.getIzq()), obtenerFE(sub.getDer()))+1);
-        return nuevaraiz;
-    }
-   
-    public NodoAVL buscar(String cat,NodoAVL r){
-        if(this.raiz == null)return null;
-        else if(r.getCategoria().equalsIgnoreCase(cat)) return r;
-        else if(r.getCategoria().compareToIgnoreCase(cat)<0) return buscar(cat,r.getDer());
-        else return buscar(cat,r.getIzq());
+    public String dibujar(){
+        String dibujo = "digraph g{\n node[shape = circle];\n";
+        dibujo += dibujarAVL(raiz);
+        dibujo += "}";
+        return dibujo;
     }
     
-    public int obtenerFE(NodoAVL nodo){
-        if(nodo==null) return -1;
-        else return nodo.getFe();
+    private String dibujarAVL(NodoAVL root){
+        String dibujo = "";
+    if(root!=null){
+        if(root.getIzq()!=null) dibujo +=  "\"" + root.getCategoria() + "\" -> \"" + root.getIzq().getCategoria() + "\";\n";
+        if(root.getDer()!=null) dibujo += "\"" + root.getCategoria() + "\" -> \"" +root.getDer().getCategoria() + "\";\n";
+        dibujo += dibujarAVL(root.getIzq());
+        dibujo += dibujarAVL(root.getDer());
+    }
+    return dibujo;
+}
+    
+    private int definirAltura(NodoAVL nodo){
+        if(nodo == null) return 0;
+        return nodo.getAltura();
     }
     
-    public NodoAVL rotacionIzq(NodoAVL nodo){//rot simple izq
+    private int encontrarAlturaMax(int a1, int a2){
+        return Math.max(a1, a2);
+    } 
+    
+    private int getEquilibrio(NodoAVL nodo){
+        if(nodo == null) return 0;
+        return definirAltura(nodo.getIzq()) - definirAltura(nodo.getDer());
+    }
+    
+    private NodoAVL encontrarMinimo(NodoAVL nodo){
+        NodoAVL actual = nodo;
+        while(actual.getIzq()!= null) actual = actual.getIzq();
+        return actual;
+    }
+    //ROTACIONES
+    private NodoAVL simpleDer(NodoAVL nodo){
         NodoAVL aux = nodo.getIzq();
-        nodo.setIzq(aux.getDer());
+        NodoAVL aux2 = aux.getDer();
         aux.setDer(nodo);
-        nodo.setFe(Math.max(obtenerFE(nodo.getIzq()), obtenerFE(nodo.getDer()))+1);
-        aux.setFe(Math.max(obtenerFE(aux.getIzq()), obtenerFE(aux.getDer()))+1);
+        nodo.setIzq(aux2);
+        nodo.setAltura(encontrarAlturaMax(definirAltura(nodo.getIzq()), definirAltura(nodo.getDer())) + 1);
+        aux.setAltura(encontrarAlturaMax(definirAltura(aux.getIzq()), definirAltura(aux.getDer())) + 1);
         return aux;
     }
     
-    public NodoAVL rotacionDer(NodoAVL nodo){//rot simple derecha
+    private NodoAVL simpleIzq(NodoAVL nodo){
         NodoAVL aux = nodo.getDer();
-        nodo.setDer(aux.getIzq());
+        NodoAVL aux2 = aux.getIzq();
         aux.setIzq(nodo);
-        nodo.setFe(Math.max(obtenerFE(nodo.getIzq()), obtenerFE(nodo.getDer()))+1);
-        aux.setFe(Math.max(obtenerFE(aux.getIzq()), obtenerFE(aux.getDer()))+1);
+        nodo.setDer(aux2);
+        nodo.setAltura(encontrarAlturaMax(definirAltura(nodo.getIzq()), definirAltura(nodo.getDer())) + 1);
+        aux.setAltura(encontrarAlturaMax(definirAltura(aux.getIzq()), definirAltura(aux.getDer())) + 1);
         return aux;
     }
-    
-    public NodoAVL dobleIzq(NodoAVL nodo){ // rotacion doble izq
-        NodoAVL aux;
-        nodo.setIzq(rotacionDer(nodo.getIzq()));
-        aux = rotacionIzq(nodo);
-        return aux;
+    //METODOS
+    public void insertar(String cat){
+        this.raiz = insertarNodo(raiz, cat);
     }
     
-    public NodoAVL dobleDer(NodoAVL nodo){//Rotacion doble derecha
-        NodoAVL aux;
-        nodo.setDer(rotacionIzq(nodo.getDer()));
-        aux = rotacionDer(nodo);
-        return aux;
+    public void eliminar(String cat){
+        this.raiz = eliminarNodo(raiz, cat);
+    }
+    
+    private NodoAVL insertarNodo(NodoAVL nodo, String cat){
+        if(nodo == null) return new NodoAVL(cat);
+        if(cat.compareToIgnoreCase(nodo.getCategoria())<0) nodo.setIzq(insertarNodo(nodo.getIzq(),cat));
+        else if(cat.compareToIgnoreCase(nodo.getCategoria())>0) nodo.setDer(insertarNodo(nodo.getDer(), cat));
+        else return nodo;
+        //redefinir altura
+        nodo.setAltura(1 + encontrarAlturaMax(definirAltura(nodo.getIzq()), definirAltura(nodo.getDer())));
+        int fe = getEquilibrio(nodo);
+        if(fe > 1 && cat.compareToIgnoreCase(nodo.getIzq().getCategoria()) < 0) return simpleDer(nodo);
+        if(fe < -1 && cat.compareToIgnoreCase(nodo.getDer().getCategoria()) > 0)return simpleIzq(nodo);
+        if(fe > 1 && cat.compareToIgnoreCase(nodo.getIzq().getCategoria()) > 0){
+            nodo.setIzq(simpleIzq(nodo.getIzq()));
+            return simpleDer(nodo);
+        }
+        if(fe < -1 && cat.compareToIgnoreCase(nodo.getDer().getCategoria()) < 0){
+            nodo.setDer(simpleDer(nodo.getDer()));
+            return simpleIzq(nodo);
+        }
+        return nodo;
+    }
+    
+    private NodoAVL eliminarNodo(NodoAVL root, String cat){
+        if(root == null) return root;
+        if(cat.compareToIgnoreCase(root.getCategoria())<0) root.setIzq(eliminarNodo(root.getIzq(), cat));
+        else if(cat.compareToIgnoreCase(root.getCategoria())>0) root.setDer(eliminarNodo(root.getDer(), cat));
+        else{
+            if(root.getIzq() == null || root.getDer() == null){
+                NodoAVL aux = null;
+                if(aux == root.getIzq()) aux = root.getDer();
+                else aux = root.getIzq();
+                if(aux == null){
+                    aux = root;
+                    root = null;
+                }else root = aux;
+            }else{
+                NodoAVL aux = encontrarMinimo(root.getDer());
+                root.setCategoria(aux.getCategoria());
+                root.setDer(eliminarNodo(root.getDer(), aux.getCategoria()));
+            }
+        }
+        if(root == null) return root;
+        root.setAltura(1 + encontrarAlturaMax(definirAltura(root.getIzq()), definirAltura(root.getDer())));
+        int fe = getEquilibrio(root);
+        if(fe > 1 && getEquilibrio(root.getIzq())>=0) return simpleDer(root);
+        if(fe > 1 && getEquilibrio(root.getIzq())<0){
+            root.setIzq(simpleIzq(root.getIzq()));
+            return simpleDer(root);
+        }
+        if(fe < -1 && getEquilibrio(root.getDer())<=0) return simpleDer(root);
+        if(fe < -1 && getEquilibrio(root.getDer())>0){
+            root.setDer(simpleDer(root.getDer()));
+            return simpleIzq(root);
+        }
+        return root;
+    }
+    
+    public NodoAVL buscar(String cat,NodoAVL root){
+        if(root == null)return null;
+        else if(root.getCategoria().equalsIgnoreCase(cat)) return root;
+        else if(root.getCategoria().compareToIgnoreCase(cat)<0) return buscar(cat,root.getDer());
+        else return buscar(cat,root.getIzq());
     }
 }

@@ -2,14 +2,16 @@ package logica;
 
 public class NodoAVL {
     private String categoria;
-    private int fe;
+    private int altura;
     private NodoAVL izq;
     private NodoAVL der;
+    public ABLibro libros;
 
     public NodoAVL(String categoria) {
         this.categoria = categoria;
-        this.fe = 0;
+        this.altura = 1;
         this.izq = this.der = null;
+        this.libros = new ABLibro();
     }
 
     public String getCategoria() {
@@ -20,12 +22,12 @@ public class NodoAVL {
         this.categoria = categoria;
     }
 
-    public int getFe() {
-        return fe;
+    public int getAltura() {
+        return altura;
     }
 
-    public void setFe(int fe) {
-        this.fe = fe;
+    public void setAltura(int altura) {
+        this.altura = altura;
     }
 
     public NodoAVL getIzq() {
