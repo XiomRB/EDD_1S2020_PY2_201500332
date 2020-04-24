@@ -17,6 +17,13 @@ public class AVLCategoria {
         this.raiz = raiz;
     }
     
+    private String dibujarRecorrido(String dib){
+        String dibujo = "rankdir = LR;\nnode[shape=box];\n";
+        dibujo += dib;
+        dibujo = dibujo.substring(0, dibujo.length()-5) + ";\n";
+        return dibujo;
+    }
+    
     public String inOrden(NodoAVL root){
         String dot = "";
         if(root != null){
@@ -48,7 +55,7 @@ public class AVLCategoria {
     }
     
     public String dibujar(){
-        String dibujo = "digraph g{\n node[shape = circle];\n";
+        String dibujo = "node[shape = circle];\n";
         dibujo += dibujarAVL(raiz);
         dibujo += "}";
         return dibujo;

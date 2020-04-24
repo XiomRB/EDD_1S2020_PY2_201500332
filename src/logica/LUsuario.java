@@ -3,7 +3,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 public class LUsuario {
-    NodoL primero, ultimo;
+    private NodoL primero, ultimo;
 
     public LUsuario() {
         primero = ultimo = null;
@@ -91,5 +91,21 @@ public class LUsuario {
         }
         dibujo += aux.getCarnet();
         return dibujo;
+    }
+
+    public NodoL getPrimero() {
+        return primero;
+    }
+
+    public void setPrimero(NodoL primero) {
+        this.primero = primero;
+    }
+
+    public NodoL getUltimo() {
+        return ultimo;
+    }
+
+    public void setUltimo(NodoL ultimo) {
+        this.ultimo = ultimo;
     }
 }
