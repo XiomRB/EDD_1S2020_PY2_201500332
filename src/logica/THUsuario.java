@@ -17,9 +17,14 @@ public class THUsuario {
         return usuarios[indice];
     }
     
+    public String loguear(int carnet, String pass){
+        LUsuario users = buscarIndice(carnet);
+        return users.loguear(carnet, pass);
+    }
+    
     public String insertar(int carnet, String nombre, String apellido, String carrera, String clave){
         LUsuario usuario = buscarIndice(carnet);
-        if(usuario.buscar(carnet) == null) usuario.insertar(carnet, nombre, apellido, carrera, carrera);
+        if(usuario.buscar(carnet) == null) usuario.insertar(carnet, nombre, apellido, carrera, clave);
         else return "El usuario ya existe";
         return "Usuario agregado";
     }

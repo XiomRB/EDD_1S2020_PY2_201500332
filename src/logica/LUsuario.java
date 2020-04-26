@@ -9,7 +9,7 @@ public class LUsuario {
         primero = ultimo = null;
     }
     
-    public static String getMD5(String clave){
+    private static String getMD5(String clave){
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] msgdgst = md.digest(clave.getBytes());

@@ -1,13 +1,15 @@
 package proyecto2edd;
 
-import logica.ABLibro;
-import logica.LecturaJson;
+import vista.JPrincipal;
+
 
 public class Proyecto2EDD {
 
     public static void main(String[] args) {
-        LecturaJson lec = new LecturaJson();
-        lec.leerUsuario("C:\\Users\\Oliveira Raymundo\\Downloads\\usuarios.json");
+        JPrincipal principal = new JPrincipal();
+        principal.setVisible(true);
+        /*LecturaJson lec = new LecturaJson();
+        lec.leerLibro("C:\\Users\\Oliveira Raymundo\\Desktop\\Libros.json");
         /*ABLibro t = new ABLibro();
         t.insertar(10,"","","",0,0,"",0); 
         t.insertar(20,"","","",0,0,"",0);

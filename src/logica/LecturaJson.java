@@ -1,5 +1,6 @@
 package logica;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,11 +12,11 @@ import org.json.simple.parser.ParseException;
 public class LecturaJson {
     JSONParser parser = new JSONParser();
     
-    public JSONArray leerJson(String arch){
+    public JSONArray leerJson(File arch, String dato){
         try {
             Object obj = parser.parse(new FileReader(arch));
             JSONObject jsonob = (JSONObject) obj;
-            JSONArray usuarios = (JSONArray)jsonob.get("Usuarios");
+            JSONArray usuarios = (JSONArray)jsonob.get(dato);
             return usuarios;
         } catch (FileNotFoundException e) {}
         catch(IOException e){}
@@ -23,27 +24,37 @@ public class LecturaJson {
         return null;
     }
     
-    public Object[][] leerUsuario(String arch){
-        JSONArray usuarios = leerJson(arch);
-        Object[][] users = new Object[usuarios.size()][5];
-        for (int i = 0; i < usuarios.size(); i++) {
-            JSONObject user = (JSONObject)usuarios.get(i);
-            users[i][0] = user.get("Carnet");
-            users[i][1] = user.get("Nombre");
-            users[i][2] = user.get("Apellido");
-            users[i][3] = user.get("Carrera");
-            users[i][4] = user.get("Password");
-        }
-        for (int i = 0; i < users.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(users[i][j] + " ");
+    public Object[][] leerUsuario(File arch){
+        JSONArray usuarios = leerJson(arch,"Usuarios");
+        Object[][] users;
+        if (usuarios != null) {
+            users = new Object[usuarios.size()][5];
+            for (int i = 0; i < usuarios.size(); i++) {
+                JSONObject user = (JSONObject)usuarios.get(i);
+                users[i][0] = user.get("Carnet");
+                users[i][1] = user.get("Nombre");
+                users[i][2] = user.get("Apellido");
+                users[i][3] = user.get("Carrera");
+                users[i][4] = user.get("Password");
             }
-            System.out.println("");
-        }
+        }else users = null;
         return users;
     }
     
-    public void leerLibro(){
-        
+    public Object[][] leerLibro(File arch){
+        JSONArray books = leerJson(arch,"Libros");
+        Object[][] libros = new Object[books.size()][8];
+        for (int i = 0; i < books.size(); i++) {
+            JSONObject libro = (JSONObject)books.get(i);
+            libros[i][0] = libro.get("ISBN");
+            libros[i][1] = libro.get("Titulo");
+            libros[i][2] = libro.get("Autor");
+            libros[i][3] = libro.get("Editorial");
+            libros[i][4] = libro.get("Año");
+            libros[i][5] = libro.get("Edicion");
+            libros[i][6] = libro.get("Idioma");
+            libros[i][7] = libro.get("Categoria");
+        }
+        return libros;
     }
 }
