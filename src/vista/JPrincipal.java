@@ -6,19 +6,16 @@
 package vista;
 
 import javax.swing.JFileChooser;
-import logica.LecturaJson;
-import logica.THUsuario;
 import java.io.File;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Oliveira Raymundo
  */
 public class JPrincipal extends javax.swing.JFrame {
-    
-    public static THUsuario usuarios = new THUsuario();
-    private JUsuario usuario = new JUsuario();
+    JUsuario usuario = new JUsuario();
     
     public JPrincipal() {
         initComponents();
@@ -151,15 +148,15 @@ public class JPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIngresoActionPerformed
-        String msj = usuarios.loguear(Integer.parseInt(this.jtxtUsuario.getText()), this.jtxtpass.getText());
+        String msj = Operaciones.usuarios.loguear(Integer.parseInt(this.jtxtUsuario.getText()), this.jtxtpass.getText());
         if(msj.equals("")){
+            usuario.setUsuario(Operaciones.usuarios.buscar(Integer.parseInt(jtxtUsuario.getText())));
+            usuario.setTitle("Biblioteca de " + usuario.getUsuario());
             this.setVisible(false);
             usuario.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, msj);
-            this.jtxtUsuario.setText("");
-            this.jtxtpass.setText("");
-        }
+        }else JOptionPane.showMessageDialog(null, msj);
+        this.jtxtUsuario.setText("");
+        this.jtxtpass.setText("");
     }//GEN-LAST:event_jbtnIngresoActionPerformed
 
     private void jbtnCrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCrearCuentaActionPerformed
@@ -169,17 +166,12 @@ public class JPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnCrearCuentaActionPerformed
 
     private void jbtncargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncargaActionPerformed
-        LecturaJson lec = new LecturaJson();
         JFileChooser archi = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        archi.setFileFilter(filtro);
         if(archi.showDialog(null, "Cargar Usuarios") == JFileChooser.APPROVE_OPTION){
             File archivo = archi.getSelectedFile();
-            Object[][] users = lec.leerUsuario(archivo);
-            if (users != null){
-                for (int i = 0; i < users.length; i++) {
-                    usuarios.insertar(Integer.parseInt(users[i][0].toString()), users[i][1].toString(), users[i][2].toString(), users[i][3].toString(), users[i][4].toString());
-                }
-                JOptionPane.showMessageDialog(null, "Usuarios cargados con exito");    
-            }else JOptionPane.showMessageDialog(null, "No se encontraron usuarios en el archivo");
+            usuario.ops.cargarUsuarios(archivo);
         }
     }//GEN-LAST:event_jbtncargaActionPerformed
 

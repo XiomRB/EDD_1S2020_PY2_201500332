@@ -12,6 +12,16 @@ public class THUsuario {
         }
     }
     
+    public String modificarUsuario(int carnet, String nombre, String apellido, String carrera, String password){
+        LUsuario usuario = buscarIndice(carnet);
+        return usuario.modificar(carnet, nombre, apellido, carrera, password);
+    }
+    
+    public NodoL buscar(int carnet){
+        LUsuario users = buscarIndice(carnet);
+        return users.buscar(carnet);
+    }
+    
     public LUsuario buscarIndice(int carnet){
         int indice = carnet%tam;
         return usuarios[indice];

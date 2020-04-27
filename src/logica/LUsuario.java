@@ -58,20 +58,16 @@ public class LUsuario {
         return aux;
     }
     
-    public void modificar(int carnet, String nombre, String apellido, String carrera, String password){
+    public String modificar(int carnet, String nombre, String apellido, String carrera, String password){
         NodoL aux = buscar(carnet);
         if(aux != null){
-            String pass = getMD5(password);
             aux.setNombre(nombre);
             aux.setApellido(apellido);
             aux.setCarrera(carrera);
-            aux.setPassword(pass);
+            if (password != "") aux.setPassword(getMD5(password));
+            return "Datos actualizados";
         }
-        System.out.println(aux.getCarnet());
-        System.out.println(aux.getNombre());
-        System.out.println(aux.getApellido());
-        System.out.println(aux.getCarrera());
-        System.out.println(aux.getPassword());
+        return "No se pudo actualizar datos";
     }
     
     public String loguear(int carnet, String pass){

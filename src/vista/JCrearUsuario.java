@@ -157,7 +157,7 @@ public class JCrearUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnRegresarActionPerformed
 
     private void jbtncrearUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncrearUsuarioActionPerformed
-        String msj = JPrincipal.usuarios.insertar(Integer.parseInt(this.jtxtUser.getText()), this.jtxtName.getText(), this.jtxtSurname.getText(), this.jtxtCareer.getText(), this.jtxtpass.getText());
+        String msj = Operaciones.usuarios.insertar(Integer.parseInt(this.jtxtUser.getText()), this.jtxtName.getText(), this.jtxtSurname.getText(), this.jtxtCareer.getText(), this.jtxtpass.getText());
         JOptionPane.showMessageDialog(null, msj);
         this.jtxtCareer.setText("");
         this.jtxtName.setText("");

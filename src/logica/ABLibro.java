@@ -6,9 +6,11 @@ public class ABLibro {
     int maxclaves = maxhijos -1;
     int minclaves = (maxhijos +1)/2-1;
     int splitindex = (maxhijos-1)/2;
+    int total;
 
     public ABLibro() {
         raiz = null;
+        total = 0;
     }
     
     public void dibujar(){
@@ -24,12 +26,16 @@ public class ABLibro {
         return raiz.buscar(isbn);
     }
     
-    public void insertar(int isbn, String tit, String autor, String editorial, int año, int edicion, String idioma, int prop){
-        Libro nuevo = new Libro(isbn, tit, autor, editorial, año, edicion, idioma, prop);
-        if(raiz == null){
-            raiz = new NodoAB(true);
-            raiz.claves[0] =nuevo;
-        }else insertarNodo(raiz,nuevo);
+    public String insertar(int isbn, String tit, String autor, String editorial, int año, int edicion, String idioma, int prop){
+        if (buscar(isbn) == null) {
+            Libro nuevo = new Libro(isbn, tit, autor, editorial, año, edicion, idioma, prop);
+            if(raiz == null){
+                raiz = new NodoAB(true);
+                raiz.claves[0] =nuevo;
+            }else insertarNodo(raiz,nuevo);
+            total++;
+            return "Libro agregado";
+        } else return "El libro ya existe, puede buscarlo en la biblioteca virtual";
     }
 
     public NodoAB dividirNodo(NodoAB nodo){
@@ -109,6 +115,7 @@ public class ABLibro {
             raiz = raiz.hijos[0];
             raiz.padre = null;
         }
+        total--;
     }
     
     public void eliminarNodo(NodoAB root,int isbn){

@@ -14,6 +14,7 @@ public class ContenidoLibro extends javax.swing.JDialog {
     public ContenidoLibro(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setTitle("Detalles");
     }
 
     @SuppressWarnings("unchecked")
