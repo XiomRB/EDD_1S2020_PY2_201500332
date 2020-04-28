@@ -1,0 +1,7 @@
+digraph g{
+node[shape = circle];
+"Ensayo\nCantidad: 3" -> "Consulta\nCantidad: 2";
+"Ensayo\nCantidad: 3" -> "Ficcion\nCantidad: 0";
+"Consulta\nCantidad: 2" -> "Animales\nCantidad: 0";
+"Ficcion\nCantidad: 0" -> "Miedo\nCantidad: 0";
+}

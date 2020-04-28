@@ -1,0 +1,5 @@
+digraph g{
+rankdir = LR;
+node[shape=box];
+"Ensayo\nCantidad:3" -> "Consulta\nCantidad:2" -> "Animales\nCantidad:0" -> "Ficcion\nCantidad:0" -> "Miedo\nCantidad:0";
+}

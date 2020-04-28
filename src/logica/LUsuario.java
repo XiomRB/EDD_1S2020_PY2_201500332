@@ -85,7 +85,7 @@ public class LUsuario {
             dibujo += aux.dibujarNodo();
             aux = aux.getSig();
         }
-        dibujo += aux.getCarnet();
+        dibujo += "\"" + aux.getCarnet() + "\\n" + aux.getNombre() + " " + aux.getApellido() + "\\n" + aux.getPassword() + "\"";
         return dibujo;
     }
 

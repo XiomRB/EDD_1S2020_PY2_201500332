@@ -1,10 +1,13 @@
 package vista;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,7 +42,7 @@ public class JUsuario extends javax.swing.JFrame {
         jbtnbbuscar = new javax.swing.JButton();
         busqueda = new javax.swing.JScrollPane();
         panelbusqueda = new javax.swing.JPanel();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
+        bibliotecaVirtual = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jtxtbvtit = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -52,6 +55,8 @@ public class JUsuario extends javax.swing.JFrame {
         cargalibros = new javax.swing.JMenuItem();
         operacionesLibro = new javax.swing.JMenu();
         agregarLibro = new javax.swing.JMenuItem();
+        agregarCat = new javax.swing.JMenuItem();
+        eliminarCat = new javax.swing.JMenuItem();
         reportes = new javax.swing.JMenu();
         reportarCat = new javax.swing.JMenuItem();
         reportarLibros = new javax.swing.JMenuItem();
@@ -158,10 +163,10 @@ public class JUsuario extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("Busqueda", jPanel3);
+        bibliotecaVirtual.addTab("Busqueda", jPanel3);
 
-        jTabbedPane1.addTab("Biblioteca Virtual", jTabbedPane3);
-        jTabbedPane3.getAccessibleContext().setAccessibleName("categoriasvirtual");
+        jTabbedPane1.addTab("Biblioteca Virtual", bibliotecaVirtual);
+        bibliotecaVirtual.getAccessibleContext().setAccessibleName("categoriasvirtual");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -188,22 +193,58 @@ public class JUsuario extends javax.swing.JFrame {
 
         jMenuBar1.add(carga);
 
-        operacionesLibro.setText("Operaciones Libro");
+        operacionesLibro.setText("Operaciones");
 
-        agregarLibro.setText("Agregar");
+        agregarLibro.setText("Agregar Libro");
+        agregarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarLibroActionPerformed(evt);
+            }
+        });
         operacionesLibro.add(agregarLibro);
+
+        agregarCat.setText("Agregar Categoria");
+        agregarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarCatActionPerformed(evt);
+            }
+        });
+        operacionesLibro.add(agregarCat);
+
+        eliminarCat.setText("Eliminar Categoria");
+        eliminarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarCatActionPerformed(evt);
+            }
+        });
+        operacionesLibro.add(eliminarCat);
 
         jMenuBar1.add(operacionesLibro);
 
         reportes.setText("Reportes");
 
         reportarCat.setText("Categorias");
+        reportarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportarCatActionPerformed(evt);
+            }
+        });
         reportes.add(reportarCat);
 
         reportarLibros.setText("Libros");
+        reportarLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportarLibrosActionPerformed(evt);
+            }
+        });
         reportes.add(reportarLibros);
 
         reporteUsuarios.setText("Usuarios");
+        reporteUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reporteUsuariosActionPerformed(evt);
+            }
+        });
         reportes.add(reporteUsuarios);
 
         jMenuBar1.add(reportes);
@@ -227,6 +268,11 @@ public class JUsuario extends javax.swing.JFrame {
         operacionesUsuario.add(actualizarDatos);
 
         eliminarCuenta.setText("Eliminar Cuenta");
+        eliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarCuentaActionPerformed(evt);
+            }
+        });
         operacionesUsuario.add(eliminarCuenta);
 
         jMenuBar1.add(operacionesUsuario);
@@ -254,21 +300,73 @@ public class JUsuario extends javax.swing.JFrame {
         if(archi.showDialog(null, "Cargar Libros") == JFileChooser.APPROVE_OPTION){
             File archivo = archi.getSelectedFile();
             ops.cargarLibros(archivo, usuario.getCarnet());
-        }
-        for (int i = 1; i < miBiblioteca.getTabCount(); i++) miBiblioteca.removeTabAt(i);
+        //actualizacion de interfaz
         crearCategoriasUsuario();
+        crearCatBiblioteca();
+        }
     }//GEN-LAST:event_cargalibrosActionPerformed
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         usuario = null;
         this.setVisible(false);
         JPrincipal inicio = new JPrincipal();
+        inicio.setVisible(true);
     }//GEN-LAST:event_logOutActionPerformed
 
     private void actualizarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarDatosActionPerformed
        ActualizarDatos actualiza = new ActualizarDatos(this, true);
        actualiza.setVisible(true);
     }//GEN-LAST:event_actualizarDatosActionPerformed
+
+    private void eliminarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarCuentaActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Seguro que desea eliminar su cuenta?") == JOptionPane.YES_OPTION) {
+            ops.eliminarCuenta(usuario.getCarnet());
+            usuario = null;
+            this.setVisible(false);
+            JPrincipal inicio = new JPrincipal();
+            inicio.setVisible(true);
+        }
+    }//GEN-LAST:event_eliminarCuentaActionPerformed
+
+    private void agregarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarLibroActionPerformed
+        JAgregarLibro add = new JAgregarLibro(this, true);
+        add.setVisible(true);
+    }//GEN-LAST:event_agregarLibroActionPerformed
+
+    private void agregarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarCatActionPerformed
+        String cat = JOptionPane.showInputDialog(null, "Nombre de la categoria a crear:");
+        if (Operaciones.categorias.buscar(cat, Operaciones.categorias.getRaiz())== null) {
+                Operaciones.categorias.insertar(cat);
+                Operaciones.categoriasUsuario.add(new LibrosUsuario(cat, new ArrayList<>()));
+                Operaciones.categoriasBiblioteca.add(new LibrosUsuario(cat, new ArrayList<>()));
+                JScrollPane scroll = new JScrollPane();
+                JScrollPane scrooll2 = new JScrollPane();
+                miBiblioteca.add(cat,scroll);
+                miBiblioteca.updateUI();
+                bibliotecaVirtual.add(cat,scrooll2);
+                bibliotecaVirtual.updateUI();
+        }else JOptionPane.showMessageDialog(null, "La categoria ya existe, puede verla en la biblioteca virtual");
+    }//GEN-LAST:event_agregarCatActionPerformed
+
+    private void eliminarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarCatActionPerformed
+        JEliminarCategoria elimCat = new JEliminarCategoria(this, true);
+        elimCat.setVisible(true);
+    }//GEN-LAST:event_eliminarCatActionPerformed
+
+    private void reportarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportarCatActionPerformed
+        ops.reportarCategorias();
+        JOptionPane.showMessageDialog(null, "Reporte hecho");
+    }//GEN-LAST:event_reportarCatActionPerformed
+
+    private void reporteUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteUsuariosActionPerformed
+        ops.reportarUsuarios();
+        JOptionPane.showMessageDialog(null, "Reporte completado");
+    }//GEN-LAST:event_reporteUsuariosActionPerformed
+
+    private void reportarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportarLibrosActionPerformed
+        String cat = JOptionPane.showInputDialog(null, "De que categoria desea ver el reporte de libros?");
+        JOptionPane.showMessageDialog(null, ops.reportarLibro(cat));
+    }//GEN-LAST:event_reportarLibrosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -313,32 +411,72 @@ public class JUsuario extends javax.swing.JFrame {
         return this.usuario.getNombre() + " " + this.usuario.getApellido();
     }
     
-    private void crearCategoriasUsuario(){
+    public void crearCatBiblioteca(){
+        System.out.println(Operaciones.categoriasBiblioteca.size());
+        for (int i = bibliotecaVirtual.getTabCount() - 1; i >0; i--) bibliotecaVirtual.remove(i);
+        for (int i = 0; i < Operaciones.categoriasBiblioteca.size(); i++) {
+            JPanel p = new JPanel(new GridLayout(5, 0));
+            crearLibrosBiblioteca(i,p);
+            bibliotecaVirtual.add(Operaciones.categoriasBiblioteca.get(i).getCategoria(), p);
+        }
+        bibliotecaVirtual.updateUI();
+    }
+
+    public void crearCategoriasUsuario(){
+        for (int i = miBiblioteca.getTabCount()-1; i > 0; i--) miBiblioteca.remove(i);
         for (int i = 0; i < Operaciones.categoriasUsuario.size(); i++) {
             JPanel p = new JPanel(new GridLayout(5, 0));
-            ArrayList<JButton> botones = crearLibrosUsuario(i);
-            System.out.println(botones.size());
-            for (int j = 0; j < botones.size(); j++) p.add(botones.get(j));
+            crearLibrosUsuario(i,p);
             miBiblioteca.add(Operaciones.categoriasUsuario.get(i).getCategoria(), p);
         }
         miBiblioteca.updateUI();
     }
     
-    private ArrayList<JButton> crearLibrosUsuario(int cat){
-        ArrayList<JButton> libros =  new ArrayList<>();
+    private void crearLibrosUsuario(int cat, JPanel p){
         for (int i = 0; i < Operaciones.categoriasUsuario.get(cat).getLibros().size(); i++) {
             Book libronuevo = Operaciones.categoriasUsuario.get(cat).getLibro(i);
             JButton btn = new JButton(libronuevo.getIsbn() + "     " + libronuevo.getTitulo());
-            libros.add(btn);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    ops.verLibro(miBiblioteca.getTitleAt(miBiblioteca.getSelectedIndex()), libronuevo.getIsbn());
+                    if (Operaciones.librovisitado != null) {
+                        ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,miBiblioteca.getTitleAt(miBiblioteca.getSelectedIndex()),true);
+                        contenido.setVisible(true);
+                    }
+                }
+            });
+            p.add(btn);
         }
-        return libros;
     }
+    
+    private void crearLibrosBiblioteca(int cat2, JPanel p2){
+        for (int i = 0; i < Operaciones.categoriasBiblioteca.get(cat2).getLibros().size(); i++) {
+            Book libronuevo = Operaciones.categoriasBiblioteca.get(cat2).getLibro(i);
+            JButton btn = new JButton(libronuevo.getIsbn() + "     " + libronuevo.getTitulo());
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    ops.verLibro(bibliotecaVirtual.getTitleAt(bibliotecaVirtual.getSelectedIndex()), libronuevo.getIsbn());
+                    if (Operaciones.librovisitado != null) {
+                        ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,bibliotecaVirtual.getTitleAt(bibliotecaVirtual.getSelectedIndex()),false);
+                        contenido.setVisible(true);
+                    }
+                }
+            });
+            p2.add(btn);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem actualizarDatos;
+    private javax.swing.JMenuItem agregarCat;
     private javax.swing.JMenuItem agregarLibro;
+    public javax.swing.JTabbedPane bibliotecaVirtual;
     private javax.swing.JScrollPane busqueda;
     private javax.swing.JMenu carga;
     private javax.swing.JMenuItem cargalibros;
+    private javax.swing.JMenuItem eliminarCat;
     private javax.swing.JMenuItem eliminarCuenta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -349,7 +487,6 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JButton jbtnbbuscar;
     private javax.swing.JButton jbtnbvbuscar;
     private javax.swing.JTextField jtxtbisbn;
@@ -357,7 +494,7 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JTextField jtxtbvisbn;
     private javax.swing.JTextField jtxtbvtit;
     private javax.swing.JMenuItem logOut;
-    private javax.swing.JTabbedPane miBiblioteca;
+    public javax.swing.JTabbedPane miBiblioteca;
     private javax.swing.JMenu operacionesLibro;
     private javax.swing.JMenu operacionesUsuario;
     private javax.swing.JPanel panelbusqueda;

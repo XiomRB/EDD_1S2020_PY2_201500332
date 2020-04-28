@@ -66,6 +66,6 @@ public class NodoL {
     }
     
     public String dibujarNodo(){
-        return carnet + " -> ";
+        return "\"" + carnet + "\\n" + nombre + " " + apellido + "\\n" + password + "\" -> ";
     }
 }

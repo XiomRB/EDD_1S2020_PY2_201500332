@@ -13,8 +13,7 @@ public class Archivo {
             FileOutputStream reporte = new FileOutputStream(archivo);
             byte[] salida = contenido.getBytes();
             reporte.write(salida);
-            System.out.println("Archivo Guardado");
-        }catch(Exception e){System.out.println(e.getMessage());}
+        }catch(Exception e){JOptionPane.showMessageDialog(null,e.getMessage());}
     }
     
     public void generarGraphviz(String nombre,String reporte){

@@ -1,6 +1,7 @@
 package logica;
 
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import vista.LibrosUsuario;
 
 public class AVLCategoria {
    private NodoAVL raiz;
@@ -17,10 +18,11 @@ public class AVLCategoria {
         this.raiz = raiz;
     }
     
-    private String dibujarRecorrido(String dib){
-        String dibujo = "rankdir = LR;\nnode[shape=box];\n";
+    public String dibujarRecorrido(String dib){
+        String dibujo = "digraph g{\nrankdir = LR;\nnode[shape=box];\n";
         dibujo += dib;
-        dibujo = dibujo.substring(0, dibujo.length()-5) + ";\n";
+        dibujo = dibujo.substring(0, dibujo.length()-4) + ";\n";
+        dibujo += "}";
         return dibujo;
     }
     
@@ -28,7 +30,7 @@ public class AVLCategoria {
         String dot = "";
         if(root != null){
             dot += inOrden(root.getIzq());
-            dot += "\"" + root.getCategoria() + "\" -> ";
+            dot += "\"" + root.getCategoria() + "\\nCantidad: " + root.libros.total + "\" -> ";
             dot += inOrden(root.getDer());
         }
         return dot;
@@ -37,7 +39,7 @@ public class AVLCategoria {
     public String preOrder(NodoAVL root){
         String dot = "";
         if(root != null){
-            dot += "\"" + root.getCategoria() + " " + root.getAltura() + "\" -> ";
+            dot += "\"" + root.getCategoria() + "\\nCantidad: " + root.libros.total + "\" -> ";
             dot += preOrder(root.getIzq());
             dot += preOrder(root.getDer());
         }
@@ -49,13 +51,13 @@ public class AVLCategoria {
         if(root != null){
             dot += preOrder(root.getIzq());
             dot += preOrder(root.getDer());
-            dot += "\"" + root.getCategoria() + "\" -> ";
+            dot += "\"" + root.getCategoria() + "\\nCantidad: " + root.libros.total + "\" -> ";
         }
         return dot;
     }
     
     public String dibujar(){
-        String dibujo = "node[shape = circle];\n";
+        String dibujo = "digraph g{\nnode[shape = circle];\n";
         dibujo += dibujarAVL(raiz);
         dibujo += "}";
         return dibujo;
@@ -64,8 +66,8 @@ public class AVLCategoria {
     private String dibujarAVL(NodoAVL root){
         String dibujo = "";
     if(root!=null){
-        if(root.getIzq()!=null) dibujo +=  "\"" + root.getCategoria() + "\" -> \"" + root.getIzq().getCategoria() + "\";\n";
-        if(root.getDer()!=null) dibujo += "\"" + root.getCategoria() + "\" -> \"" +root.getDer().getCategoria() + "\";\n";
+        if(root.getIzq()!=null) dibujo += "\"" + root.getCategoria() + "\\nCantidad: " + root.libros.total + "\" -> \"" + root.getIzq().getCategoria() + "\\nCantidad: " + root.getIzq().libros.total + "\";\n";
+        if(root.getDer()!=null) dibujo += "\"" + root.getCategoria() + "\\nCantidad: " + root.libros.total + "\" -> \"" + root.getDer().getCategoria() + "\\nCantidad: " + root.getDer().libros.total + "\";\n";
         dibujo += dibujarAVL(root.getIzq());
         dibujo += dibujarAVL(root.getDer());
     }
@@ -181,5 +183,23 @@ public class AVLCategoria {
         else if(root.getCategoria().equalsIgnoreCase(cat)) return root;
         else if(root.getCategoria().compareToIgnoreCase(cat)<0) return buscar(cat,root.getDer());
         else return buscar(cat,root.getIzq());
+    }
+    
+    public void buscarCatUsuarios(int carnet,ArrayList<LibrosUsuario> libUs, NodoAVL root){
+        if(root!=null){
+            libUs.add(new LibrosUsuario(root.getCategoria(), new ArrayList<>()));
+            root.libros.getRaiz().buscarCarnet(carnet, libUs.get(libUs.size()-1));
+            buscarCatUsuarios(carnet, libUs, root.getIzq());
+            buscarCatUsuarios(carnet, libUs, root.getDer());
+        }
+    }
+    
+    public void crearCategBiblioteca(ArrayList<LibrosUsuario> libUs, NodoAVL root){
+        if(root!=null){
+            libUs.add(new LibrosUsuario(root.getCategoria(), new ArrayList<>()));
+            root.libros.getRaiz().crearLibrosBiblioteca(libUs.get(libUs.size()-1));
+            crearCategBiblioteca(libUs, root.getIzq());
+            crearCategBiblioteca(libUs, root.getDer());
+        }
     }
 }

@@ -13,17 +13,18 @@ public class ABLibro {
         total = 0;
     }
     
-    public void dibujar(){
+    public String dibujar(){
+        String dibujo = "";
         if(raiz!=null){
-            raiz.recorrer();
-        System.out.println("recorrido 2");
-            raiz.recorrer2();
+            dibujo += raiz.recorrer(0);
+            //dibujo += raiz.recorrer2(0);
         }
+        return dibujo;
     }
     
-    public NodoAB buscar(int isbn){
+    public Libro buscar(int isbn){
         if(raiz == null)return null;
-        return raiz.buscar(isbn);
+        return raiz.buscarLibro(isbn);
     }
     
     public String insertar(int isbn, String tit, String autor, String editorial, int año, int edicion, String idioma, int prop){
@@ -38,7 +39,7 @@ public class ABLibro {
         } else return "El libro ya existe, puede buscarlo en la biblioteca virtual";
     }
 
-    public NodoAB dividirNodo(NodoAB nodo){
+    private NodoAB dividirNodo(NodoAB nodo){
         NodoAB derecho = new NodoAB(true);
         derecho.clavesactuales = nodo.clavesactuales - splitindex -1;
         Libro padre = nodo.claves[splitindex];
@@ -81,7 +82,7 @@ public class ABLibro {
         }
     }
     
-    public void insertarNodo(NodoAB root,Libro nuevo){
+    private void insertarNodo(NodoAB root,Libro nuevo){
         if(root.hoja){
             root.clavesactuales++;
             int i = root.clavesactuales -1;
@@ -98,7 +99,7 @@ public class ABLibro {
         }
     }
     
-    public void repararInsercion(NodoAB nodo){
+    private void repararInsercion(NodoAB nodo){
         if(nodo.clavesactuales <= maxclaves) return;
         else if(nodo.padre == null){
             raiz = dividirNodo(nodo);
@@ -118,7 +119,7 @@ public class ABLibro {
         total--;
     }
     
-    public void eliminarNodo(NodoAB root,int isbn){
+    private void eliminarNodo(NodoAB root,int isbn){
         if (root != null) {
             int i;
             for (i = 0; (i < root.clavesactuales) && (root.claves[i].getISBN()<isbn); i++);
@@ -144,7 +145,7 @@ public class ABLibro {
         }
     }
     
-    public void balancear(NodoAB root){
+    private void balancear(NodoAB root){
         if (root.clavesactuales < minclaves) {
             if (root.padre == null) {
                 if (root.clavesactuales == 0) {
