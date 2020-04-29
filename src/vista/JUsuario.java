@@ -1,5 +1,6 @@
 package vista;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,7 @@ public class JUsuario extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jbtnbvbuscar = new javax.swing.JButton();
         panelbvbusqueda = new javax.swing.JScrollPane();
+        pbusquedav = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         carga = new javax.swing.JMenu();
         cargalibros = new javax.swing.JMenuItem();
@@ -73,6 +75,11 @@ public class JUsuario extends javax.swing.JFrame {
         jLabel4.setText("ISBN:");
 
         jbtnbbuscar.setText("Buscar");
+        jbtnbbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnbbuscarActionPerformed(evt);
+            }
+        });
 
         panelbusqueda.setLayout(new java.awt.GridLayout(10, 0));
         busqueda.setViewportView(panelbusqueda);
@@ -125,6 +132,14 @@ public class JUsuario extends javax.swing.JFrame {
         jLabel2.setText("ISBN:");
 
         jbtnbvbuscar.setText("Buscar");
+        jbtnbvbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnbvbuscarActionPerformed(evt);
+            }
+        });
+
+        pbusquedav.setLayout(new java.awt.GridLayout(5, 0));
+        panelbvbusqueda.setViewportView(pbusquedav);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -160,7 +175,7 @@ public class JUsuario extends javax.swing.JFrame {
                         .addComponent(jLabel1)))
                 .addGap(26, 26, 26)
                 .addComponent(panelbvbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         bibliotecaVirtual.addTab("Busqueda", jPanel3);
@@ -368,6 +383,84 @@ public class JUsuario extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, ops.reportarLibro(cat));
     }//GEN-LAST:event_reportarLibrosActionPerformed
 
+    private void jbtnbbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbbuscarActionPerformed
+        panelbusqueda.removeAll();
+        if (!jtxtbisbn.getText().equals("")) {
+            ops.buscarLibroPorISBN(Integer.parseInt(jtxtbisbn.getText()));
+            if (Operaciones.librovisitado != null) {
+                if (Operaciones.librovisitado.getPropietario() == usuario.getCarnet()) {
+                    JButton btn = new JButton(Operaciones.librovisitado.getISBN()+ "     " + Operaciones.librovisitado.getTitulo());
+                    btn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                                ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,ops.cat,true);
+                                contenido.setVisible(true);
+                        }
+                    });
+                    panelbusqueda.add(btn);
+                }else JOptionPane.showMessageDialog(null, "El libro no pertenece a su biblioteca, busquelo en la biblioteca virtual");
+            }else JOptionPane.showMessageDialog(null, "El libro buscado no existe ");
+        }else if(!jtxtbtit.getText().equals("")){
+            ops.buscarPorTitulo(jtxtbtit.getText());
+            if (Operaciones.buscados.size() != 0) {
+                for (int i = 0; i < Operaciones.buscados.size(); i++) {
+                    Book libronuevo = Operaciones.buscados.get(i);
+                    JButton btn = new JButton(libronuevo.getIsbn() + "     " + libronuevo.getTitulo());
+                    btn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            ops.verLibro(libronuevo.getCat(), libronuevo.getIsbn());
+                            if (Operaciones.librovisitado != null) {
+                                ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,libronuevo.getCat(),true);
+                                contenido.setVisible(true);
+                            }
+                        }
+                    });
+                    panelbusqueda.add(btn);
+                }
+            }
+        }
+        panelbusqueda.updateUI();
+    }//GEN-LAST:event_jbtnbbuscarActionPerformed
+
+    private void jbtnbvbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbvbuscarActionPerformed
+        pbusquedav.removeAll();
+        if (!jtxtbvisbn.getText().equals("")) {
+            ops.buscarLibroPorISBN(Integer.parseInt(jtxtbvisbn.getText()));
+            if (Operaciones.librovisitado != null) {
+                    JButton btn = new JButton(Operaciones.librovisitado.getISBN()+ "     " + Operaciones.librovisitado.getTitulo());
+                    btn.addActionListener(new ActionListener() {
+                        @Override
+                    public void actionPerformed(ActionEvent ae) {
+                            ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,ops.cat,false);
+                            contenido.setVisible(true);
+                    }
+                });
+                    pbusquedav.add(btn);
+            }else JOptionPane.showMessageDialog(null, "El libro buscado no existe ");
+        }else if(!jtxtbvtit.getText().equals("")){
+            ops.buscarPorTitulo(jtxtbvtit.getText());
+            if (Operaciones.buscados.size() != 0) {
+                for (int i = 0; i < Operaciones.buscados.size(); i++) {
+                    Book libronuevo = Operaciones.buscados.get(i);
+                    JButton btn = new JButton(libronuevo.getIsbn() + "     " + libronuevo.getTitulo());
+                    btn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            ops.verLibro(libronuevo.getCat(), libronuevo.getIsbn());
+                            if (Operaciones.librovisitado != null) {
+                                ContenidoLibro contenido = new ContenidoLibro(new JFrame(), true,libronuevo.getCat(),false);
+                                contenido.setVisible(true);
+                            }
+                        }
+                    });
+                    pbusquedav.add(btn);
+                }
+            }
+        }
+        pbusquedav.updateUI();
+    }//GEN-LAST:event_jbtnbvbuscarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -412,22 +505,31 @@ public class JUsuario extends javax.swing.JFrame {
     }
     
     public void crearCatBiblioteca(){
-        System.out.println(Operaciones.categoriasBiblioteca.size());
+        pbusquedav.removeAll();
+        Operaciones.buscados.clear();
+        Operaciones.librovisitado = null;
         for (int i = bibliotecaVirtual.getTabCount() - 1; i >0; i--) bibliotecaVirtual.remove(i);
         for (int i = 0; i < Operaciones.categoriasBiblioteca.size(); i++) {
-            JPanel p = new JPanel(new GridLayout(5, 0));
-            crearLibrosBiblioteca(i,p);
-            bibliotecaVirtual.add(Operaciones.categoriasBiblioteca.get(i).getCategoria(), p);
+            JScrollPane panel = new JScrollPane();
+            JPanel p1 = new JPanel(new GridLayout(5, 0));
+            crearLibrosBiblioteca(i,p1);
+            panel.setViewportView(p1);
+            bibliotecaVirtual.add(Operaciones.categoriasBiblioteca.get(i).getCategoria(), panel);
         }
         bibliotecaVirtual.updateUI();
     }
 
     public void crearCategoriasUsuario(){
+        panelbusqueda.removeAll();
+        Operaciones.buscados.clear();
+        Operaciones.librovisitado = null;
         for (int i = miBiblioteca.getTabCount()-1; i > 0; i--) miBiblioteca.remove(i);
         for (int i = 0; i < Operaciones.categoriasUsuario.size(); i++) {
-            JPanel p = new JPanel(new GridLayout(5, 0));
-            crearLibrosUsuario(i,p);
-            miBiblioteca.add(Operaciones.categoriasUsuario.get(i).getCategoria(), p);
+            JScrollPane panel = new JScrollPane();
+            JPanel p1 = new JPanel(new GridLayout(5, 0));
+            crearLibrosUsuario(i,p1);
+            panel.setViewportView(p1);
+            miBiblioteca.add(Operaciones.categoriasUsuario.get(i).getCategoria(), panel);
         }
         miBiblioteca.updateUI();
     }
@@ -499,6 +601,7 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JMenu operacionesUsuario;
     private javax.swing.JPanel panelbusqueda;
     private javax.swing.JScrollPane panelbvbusqueda;
+    private javax.swing.JPanel pbusquedav;
     private javax.swing.JMenuItem reportarCat;
     private javax.swing.JMenuItem reportarLibros;
     private javax.swing.JMenuItem reporteUsuarios;

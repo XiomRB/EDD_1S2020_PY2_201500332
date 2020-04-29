@@ -7,17 +7,19 @@ public class ABLibro {
     int minclaves = (maxhijos +1)/2-1;
     int splitindex = (maxhijos-1)/2;
     int total;
+    int recorrido;
 
     public ABLibro() {
         raiz = null;
         total = 0;
+        recorrido = 0;
     }
     
     public String dibujar(){
         String dibujo = "";
         if(raiz!=null){
-            dibujo += raiz.recorrer(0);
-            //dibujo += raiz.recorrer2(0);
+            dibujo += raiz.recorrer();
+            dibujo += raiz.recorrer2();
         }
         return dibujo;
     }
@@ -31,8 +33,10 @@ public class ABLibro {
         if (buscar(isbn) == null) {
             Libro nuevo = new Libro(isbn, tit, autor, editorial, año, edicion, idioma, prop);
             if(raiz == null){
-                raiz = new NodoAB(true);
+                recorrido = 0;
+                raiz = new NodoAB(true,recorrido);
                 raiz.claves[0] =nuevo;
+                recorrido++;
             }else insertarNodo(raiz,nuevo);
             total++;
             return "Libro agregado";
@@ -40,7 +44,8 @@ public class ABLibro {
     }
 
     private NodoAB dividirNodo(NodoAB nodo){
-        NodoAB derecho = new NodoAB(true);
+        NodoAB derecho = new NodoAB(true,recorrido);
+        recorrido++;
         derecho.clavesactuales = nodo.clavesactuales - splitindex -1;
         Libro padre = nodo.claves[splitindex];
         if(nodo.padre != null){
@@ -72,7 +77,8 @@ public class ABLibro {
         izquierdo.clavesactuales = splitindex;
         if (nodo.padre !=null) return nodo.padre;
         else{
-            raiz = new NodoAB(false);
+            raiz = new NodoAB(false,recorrido);
+            recorrido++;
             raiz.claves[0] = padre;
             raiz.hijos[0] = izquierdo;
             raiz.hijos[1] = derecho;

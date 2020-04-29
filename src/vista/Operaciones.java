@@ -16,6 +16,9 @@ public class Operaciones {
     public static ArrayList<LibrosUsuario> categoriasUsuario = new ArrayList<>(); //categorias del usuario logueado
     public static Libro librovisitado = null;
     public static ArrayList<LibrosUsuario> categoriasBiblioteca = new ArrayList<>();
+    public static ArrayList<Book> buscados = new ArrayList<>();
+    
+    public String cat = "";
     
     private LecturaJson carga = new LecturaJson();
     private Archivo archi = new Archivo();
@@ -146,10 +149,54 @@ public class Operaciones {
         NodoAVL categoria = categorias.buscar(cat, categorias.getRaiz());
         if (categoria!=null) {
             String dibujo = "digraph g{\n node[shape = record];\n" + categoria.libros.dibujar() + "}";
-            System.out.println(dibujo);
-            //archi.generarGraphviz(cat, dibujo);
-            return dibujo;
+            archi.generarGraphviz(cat, dibujo);
+            return "Reporte generado";
         }
         return "No existe esa categoria";
+    }
+    
+    //busqueda de libros
+    public void buscarPorTitulo(String tit){
+        buscados.clear();
+        int i = 0;
+        while(i < categoriasUsuario.size()){
+            int j = 0;
+            while(j < categoriasUsuario.get(i).getLibros().size()){
+                if (categoriasUsuario.get(i).getLibro(j).getTitulo().contains(tit)){
+                    Book encontrado = new Book(categoriasUsuario.get(i).getLibro(j).getTitulo(), categoriasUsuario.get(i).getLibro(j).getIsbn());
+                    encontrado.setCat(categoriasUsuario.get(i).getCategoria());
+                    buscados.add(encontrado);
+                }
+            }
+        }
+    }
+    
+    public void buscarPorTituloBiblioteca(String tit){
+        buscados.clear();
+        int i = 0;
+        while(i < categoriasBiblioteca.size()){
+            int j = 0;
+            while(j < categoriasBiblioteca.get(i).getLibros().size()){
+                if (categoriasBiblioteca.get(i).getLibro(j).getTitulo().contains(tit)){
+                    Book encontrado = new Book(categoriasBiblioteca.get(i).getLibro(j).getTitulo(), categoriasBiblioteca.get(i).getLibro(j).getIsbn());
+                    encontrado.setCat(categoriasBiblioteca.get(i).getCategoria());
+                    buscados.add(encontrado);
+                }
+            }
+        }
+    }
+    
+    public void buscarLibroPorISBN(int isbn){
+        librovisitado = null;
+        cat = "";
+        buscarPorISBN(categorias.getRaiz(), isbn);
+    }
+    public void buscarPorISBN(NodoAVL root,int isbn){
+        if (root!= null) {
+            librovisitado = root.libros.buscar(isbn);
+            cat = root.getCategoria();
+            if (librovisitado == null) buscarPorISBN(root.getIzq(), isbn);
+            if (librovisitado == null) buscarPorISBN(root.getDer(), isbn);
+        }
     }
 }

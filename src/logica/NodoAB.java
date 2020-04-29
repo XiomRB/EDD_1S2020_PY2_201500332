@@ -9,13 +9,15 @@ public class NodoAB {
     NodoAB[] hijos;
     boolean hoja;
     NodoAB padre;//ver si se borra
-
-    public NodoAB(boolean hoja) {
+    int numero;
+    
+    public NodoAB(boolean hoja, int numero) {
         this.hoja = hoja;//cambiar a true
         this.claves = new Libro[5];
         this.hijos = new NodoAB[6];
         this.clavesactuales = 1;
         this.padre = null;
+        this.numero = numero;
     }
     
     public void buscarCarnet(int carnet,LibrosUsuario libUs){//ubica los libros del estudiante logueado
@@ -37,29 +39,29 @@ public class NodoAB {
         }
     }
     
-    public String recorrer(int i){
-        String dibujo = i + "[label = \"";
+    public String recorrer(){
+        String dibujo = numero + "[label = \"";
         for (int j = 0; j < clavesactuales; j++) {
             if (j == clavesactuales-1) dibujo += "<f" +j + "> " + claves[j].getISBN() + "\\n" + claves[j].getTitulo() + "\"];\n";
             else dibujo += "<f" +j + "> " + claves[j].getISBN() + "\\n" + claves[j].getTitulo() + " | ";          
         }
         if(!hoja){
-            for (int j = 0; j < clavesactuales +1; j++) dibujo += hijos[j].recorrer(i+1);
+            for (int j = 0; j < clavesactuales +1; j++) dibujo += hijos[j].recorrer();
         }
         return dibujo;
     }
     
-    public String recorrer2(int i){
+    public String recorrer2(){
         String dibujo = "";
         if (!hoja) {
             for (int j = 0; j < clavesactuales; j++) {
                 if (j == clavesactuales-1){
-                    dibujo += i + ":f" + j + " -> " + (i+j) + ";\n";
-                    dibujo += i + " -> " + (i+clavesactuales) + ";\n";
+                    dibujo += numero + ":f" + j + " -> " + hijos[j].numero + ";\n";
+                    dibujo += numero + ":f" + j + " -> " + hijos[clavesactuales].numero + ";\n";
                 }
-                else  dibujo += i + ":f" + j + " -> " + (i+j) + ";\n";
+                else  dibujo += numero + ":f" + j + " -> " + hijos[j].numero + ";\n";
             }
-            for (int j = 0; j < clavesactuales+1; j++) dibujo += recorrer2(i+1);
+            for (int j = 0; j < clavesactuales+1; j++) dibujo += hijos[j].recorrer2();
         }
         return dibujo;
     }

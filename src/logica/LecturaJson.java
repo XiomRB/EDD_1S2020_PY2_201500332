@@ -43,18 +43,21 @@ public class LecturaJson {
     
     public Object[][] leerLibro(File arch){
         JSONArray books = leerJson(arch,"Libros");
-        Object[][] libros = new Object[books.size()][8];
-        for (int i = 0; i < books.size(); i++) {
-            JSONObject libro = (JSONObject)books.get(i);
-            libros[i][0] = libro.get("ISBN");
-            libros[i][1] = libro.get("Titulo");
-            libros[i][2] = libro.get("Autor");
-            libros[i][3] = libro.get("Editorial");
-            libros[i][4] = libro.get("Año");
-            libros[i][5] = libro.get("Edicion");
-            libros[i][6] = libro.get("Idioma");
-            libros[i][7] = libro.get("Categoria");
-        }
+        Object[][] libros;
+        if (books != null) {
+            libros = new Object[books.size()][8];
+            for (int i = 0; i < books.size(); i++) {
+                JSONObject libro = (JSONObject)books.get(i);
+                libros[i][0] = libro.get("ISBN");
+                libros[i][1] = libro.get("Titulo");
+                libros[i][2] = libro.get("Autor");
+                libros[i][3] = libro.get("Editorial");
+                libros[i][4] = libro.get("Año");
+                libros[i][5] = libro.get("Edicion");
+                libros[i][6] = libro.get("Idioma");
+                libros[i][7] = libro.get("Categoria");
+            }
+        }else libros = null;
         return libros;
     }
 }

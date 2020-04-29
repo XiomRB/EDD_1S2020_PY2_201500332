@@ -3,6 +3,7 @@ package vista;
 public class Book {
     private String titulo;
     private int isbn;
+    private String cat = "";
 
     public Book(String titulo, int isbn) {
         this.titulo = titulo;
@@ -23,6 +24,14 @@ public class Book {
 
     public void setIsbn(int isbn) {
         this.isbn = isbn;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
     }
     
     
