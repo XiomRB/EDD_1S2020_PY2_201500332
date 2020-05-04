@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import vista.Operaciones;
 
 public class LecturaJson {
     JSONParser parser = new JSONParser();
@@ -59,5 +60,72 @@ public class LecturaJson {
             }
         }else libros = null;
         return libros;
+    }
+    
+    public void leerBloque(File arch){
+        try {
+            Object obj = parser.parse(new FileReader(arch));
+            JSONObject jsonob = (JSONObject) obj;
+            Operaciones.nodo.getBloques().añadirBloqueAnterior(Integer.parseInt(jsonob.get("INDEX").toString()), jsonob.get("TIMESTAMP").toString(), Integer.parseInt(jsonob.get("NONCE").toString()), jsonob.get("DATA").toString(), jsonob.get("PREVIUSHASH").toString(), jsonob.get("HASH").toString());
+        } catch (FileNotFoundException e) {}
+        catch(IOException e){}
+        catch(ParseException e){}
+        JSONArray lectura = leerJson(arch, "DATA");
+        for (int i = 0; i < lectura.size(); i++) {
+            JSONObject objetos = (JSONObject) lectura.get(i);
+            JSONArray crearUsuarios = (JSONArray) objetos.get("CREAR_USUARIO");
+            JSONArray eliminarUsuarios = (JSONArray) objetos.get("ELIMINAR_USUARIO");
+            JSONArray editarUsuarios = (JSONArray) objetos.get("EDITAR_USUARIO");
+            JSONArray crearLibros = (JSONArray) objetos.get("CREAR_LIBRO");
+            JSONArray eliminarLibros = (JSONArray) objetos.get("ELIMINAR_LIBRO");
+            JSONArray crearCateg = (JSONArray) objetos.get("CREAR_CATEGORIA");
+            JSONArray eliminarCateg = (JSONArray) objetos.get("ELIMINAR_CATEGORIA");
+            if (crearUsuarios != null) {
+                for (int j = 0; j < crearUsuarios.size(); j++) {
+                    JSONObject ob = (JSONObject) crearUsuarios.get(j);
+                    Operaciones.usuarios.insertar(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Contraseña").toString());                  
+                }
+            }
+            if (crearLibros != null) {
+                for (int j = 0; j < crearLibros.size(); j++) {
+                    JSONObject ob = (JSONObject) crearLibros.get(j);
+                    NodoAVL categoria  = Operaciones.categorias.buscar(ob.get("Categoria").toString(), Operaciones.categorias.getRaiz());
+                    if (categoria == null)Operaciones.categorias.insertar(ob.get("Categoria").toString());
+                    categoria = Operaciones.categorias.buscar(ob.get("Categoria").toString(), Operaciones.categorias.getRaiz());
+                    categoria.libros.insertar(Integer.parseInt(ob.get("ISBN").toString()), ob.get("Titulo").toString(), ob.get("Autor").toString(), ob.get("Editorial").toString(), Integer.parseInt(ob.get("Año").toString()), Integer.parseInt(ob.get("Edicion").toString()), ob.get("Idioma").toString(), Integer.parseInt(ob.get("Carnet").toString()));
+                }
+            }
+            if (editarUsuarios != null) {
+                for (int j = 0; j < editarUsuarios.size(); j++) {
+                    JSONObject ob = (JSONObject) editarUsuarios.get(j);
+                    Operaciones.usuarios.modificarUsuario(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Contraseña").toString());
+                }
+            }
+            if (crearCateg != null) {
+                for (int j = 0; j < crearCateg.size(); j++) {
+                    JSONObject ob = (JSONObject) crearCateg.get(j);
+                    Operaciones.categorias.insertar(ob.get("Categoria").toString());
+                }
+            }
+            if (eliminarLibros != null) {
+                for (int j = 0; j < eliminarLibros.size(); j++) {
+                    JSONObject ob = (JSONObject) eliminarLibros.get(j);
+                    NodoAVL categoria = Operaciones.categorias.buscar(ob.get("Categoria").toString(), Operaciones.categorias.getRaiz());
+                    if(categoria != null) categoria.libros.eliminar(Integer.parseInt(ob.get("ISBN").toString()));
+                }
+            }
+            if (eliminarCateg != null) {
+                for (int j = 0; j < eliminarCateg.size(); j++) {
+                    JSONObject ob = (JSONObject) eliminarCateg.get(j);
+                    Operaciones.categorias.eliminar(ob.get("Categoria").toString());
+                }
+            }
+            if (eliminarUsuarios != null) {
+                for (int j = 0; j < eliminarUsuarios.size(); j++) {
+                    JSONObject ob = (JSONObject) eliminarUsuarios.get(j);
+                    Operaciones.usuarios.eliminar(Integer.parseInt(ob.get("Carnet").toString()));
+                }
+            }
+        }
     }
 }

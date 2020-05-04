@@ -2,7 +2,7 @@ package blockchain;
 
 public class Blockchain {
     private Bloque primero;
-    Bloque ultimo;
+    private Bloque ultimo;
     int tam;
 
     public Blockchain() {
@@ -20,6 +20,17 @@ public class Blockchain {
         else{
             nuevo = new Bloque(tam, timestamp, data, ultimo.getHash());
             nuevo.minarBloque(4);
+            ultimo.setSiguiente(nuevo);
+            nuevo.setAnterior(ultimo);
+            ultimo = nuevo;
+        }
+        tam++;
+    }
+    
+    public void añadirBloqueAnterior(int index, String timestamp, int nonce, String data, String previushash, String hash){
+        Bloque nuevo = new Bloque(index, timestamp, nonce, data, previushash, hash);
+        if(tam == 0)primero = ultimo = nuevo;
+        else{
             ultimo.setSiguiente(nuevo);
             nuevo.setAnterior(ultimo);
             ultimo = nuevo;
@@ -46,5 +57,9 @@ public class Blockchain {
 
     public Bloque getPrimero() {
         return primero;
+    }
+
+    public Bloque getUltimo() {
+        return ultimo;
     }
 }

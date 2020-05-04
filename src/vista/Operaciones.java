@@ -14,6 +14,8 @@ import logica.Libro;
 import logica.NodoAVL;
 import logica.THUsuario;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import proyecto2edd.Proyecto2EDD;
 
 public class Operaciones {
     public static AVLCategoria categorias = new AVLCategoria(); //categorias de toda la biblioteca
@@ -31,9 +33,6 @@ public class Operaciones {
     private LecturaJson carga = new LecturaJson();
     private Archivo archi = new Archivo();
     public Data operacionData = new Data();
-    private int numbloque = 0;
-    
-    
     
     
     public void cargarUsuarios(File archivo){//carga masiva de usuarios al sistema
@@ -230,11 +229,19 @@ public class Operaciones {
         if(!data.isEmpty() || data != null){
             SimpleDateFormat d = new SimpleDateFormat("dd:MM:yy::HH:mm:ss");
             nodo.getBloques().agregarBloque(d.format(new Date()),data.toString());
-            String msj = archi.guardarBloque(data.toJSONString(), "Bloque" + numbloque);
-            if(msj.equals("Bloque generado")) numbloque++;
+            JSONObject block = new JSONObject();
+            block.put("INDEX",nodo.getBloques().getUltimo().getIndex());
+            block.put("TIMESTAMP",nodo.getBloques().getUltimo().getTimestamp());
+            block.put("NONCE",nodo.getBloques().getUltimo().getNonce());
+            block.put("DATA",data);
+            block.put("PREVIUSHASH",nodo.getBloques().getUltimo().getPreviushash());
+            block.put("HASH",nodo.getBloques().getUltimo().getHash());
+            String msj = archi.guardarBloque(block.toJSONString(), "Bloque" + Proyecto2EDD.b);
+            if(msj.equals("Bloque generado")) Proyecto2EDD.b++;
             data.clear();
             return msj;
         }
         return "No se ha generado ninguna accion dentro de la biblioteca";
     }
+
 }

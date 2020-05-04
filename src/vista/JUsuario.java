@@ -1,11 +1,15 @@
 package vista;
 
+import blockchain.Servidor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import javafx.beans.InvalidationListener;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -17,9 +21,8 @@ import logica.AVLCategoria;
 import logica.LecturaJson;
 import logica.NodoL;
 
-public class JUsuario extends javax.swing.JFrame {
+public class JUsuario extends javax.swing.JFrame{
     public static NodoL usuario;
-    
     Operaciones ops = new Operaciones();
     
     public JUsuario() {
@@ -650,4 +653,5 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JMenuItem reporteUsuarios;
     private javax.swing.JMenu reportes;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -1,5 +1,0 @@
-digraph g{
-rankdir = LR;
-node[shape=box];
-"Consulta\nCantidad: 2" -> "Accion\nCantidad: 0" -> "Ensayo\nCantidad: 12";
-}

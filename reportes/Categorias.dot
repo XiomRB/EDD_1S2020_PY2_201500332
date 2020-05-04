@@ -1,5 +1,0 @@
-digraph g{
-node[shape = circle];
-"Consulta\nCantidad: 2" -> "Accion\nCantidad: 0";
-"Consulta\nCantidad: 2" -> "Ensayo\nCantidad: 12";
-}

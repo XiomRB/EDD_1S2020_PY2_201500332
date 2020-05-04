@@ -25,6 +25,18 @@ public class Bloque {
         this.hash = calcularHash();
         this.anterior = this.siguiente = null;
     }
+
+    public Bloque(int index, String timestamp, int nonce, String data, String previushash, String hash) {
+        this.index = index;
+        this.timestamp = timestamp;
+        this.nonce = nonce;
+        this.data = data;
+        this.previushash = previushash;
+        this.hash = hash;
+        this.anterior = this.siguiente = null;
+    }
+    
+    
     
     public String calcularHash() {
         String dataToHash = this.previushash + timestamp + Integer.toString(nonce) + data;

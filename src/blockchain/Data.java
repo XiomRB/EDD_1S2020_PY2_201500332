@@ -46,7 +46,7 @@ public class Data {
         JSONObject libro = new JSONObject();
         libro.put("ISBN",isbn);
         libro.put("Titulo", tit);
-        libro.put("Titulo", autor);
+        libro.put("Autor", autor);
         libro.put("Editorial",editorial);
         libro.put("Edicion", ed);
         libro.put("Año",anio);
