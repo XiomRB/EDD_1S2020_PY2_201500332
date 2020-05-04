@@ -95,15 +95,18 @@ public class JEliminarCategoria extends javax.swing.JDialog {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String cat = comboCat.getSelectedItem().toString();
         Operaciones.categoriasUsuario.remove(comboCat.getSelectedIndex());
+        JPrincipal.usuario.miBiblioteca.remove(comboCat.getSelectedIndex()+1);
         int i = 0;
         while (i < Operaciones.categoriasBiblioteca.size()) {            
             if (Operaciones.categoriasBiblioteca.get(i).getCategoria().equals(cat)) {
                 Operaciones.categoriasBiblioteca.remove(i);
+                JPrincipal.usuario.bibliotecaVirtual.remove(i+1);
                 break;
             }
             i++;
         }
         Operaciones.categorias.eliminar(cat);
+        JPrincipal.usuario.ops.data.add(JPrincipal.usuario.ops.operacionData.operacionCategoria("ELIMINAR_CATEGORIA",cat));
         JOptionPane.showMessageDialog(null, cat + " eliminada");
         comboCat.removeItemAt(comboCat.getSelectedIndex());
     }//GEN-LAST:event_btnEliminarActionPerformed

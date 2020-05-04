@@ -1,7 +1,11 @@
 package vista;
 
+import blockchain.Data;
+import blockchain.Nodo;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import logica.AVLCategoria;
 import logica.Archivo;
@@ -9,6 +13,7 @@ import logica.LecturaJson;
 import logica.Libro;
 import logica.NodoAVL;
 import logica.THUsuario;
+import org.json.simple.JSONArray;
 
 public class Operaciones {
     public static AVLCategoria categorias = new AVLCategoria(); //categorias de toda la biblioteca
@@ -18,16 +23,25 @@ public class Operaciones {
     public static ArrayList<LibrosUsuario> categoriasBiblioteca = new ArrayList<>();
     public static ArrayList<Book> buscados = new ArrayList<>();
     
+    public static Nodo nodo = new Nodo("00");
+    
     public String cat = "";
+    public JSONArray data = new JSONArray();
     
     private LecturaJson carga = new LecturaJson();
     private Archivo archi = new Archivo();
+    public Data operacionData = new Data();
+    private int numbloque = 0;
+    
+    
+    
     
     public void cargarUsuarios(File archivo){//carga masiva de usuarios al sistema
         Object[][] users = carga.leerUsuario(archivo);
             if (users != null){
                 for (int i = 0; i < users.length; i++) {
                     usuarios.insertar(Integer.parseInt(users[i][0].toString()), users[i][1].toString(), users[i][2].toString(), users[i][3].toString(), users[i][4].toString());
+                    data.add(operacionData.crearUs(Integer.parseInt(users[i][0].toString()), users[i][1].toString(), users[i][2].toString(), users[i][3].toString(), users[i][4].toString()));
                 }
                 JOptionPane.showMessageDialog(null, "Usuarios cargados con exito");    
             }else JOptionPane.showMessageDialog(null, "No se encontraron usuarios en el archivo");
@@ -69,6 +83,7 @@ public class Operaciones {
                 j++;
             }
             categoriasBiblioteca.get(j).setLibro(isbn, tit);
+            data.add(operacionData.crearLib(isbn, tit, autor, edit, anio, ed, idioma, prop, cat));
         }
         return msj;
     }
@@ -81,6 +96,7 @@ public class Operaciones {
             }
         }
         usuarios.eliminar(cuenta);
+        data.add(operacionData.eliminUsuario(cuenta));
         JOptionPane.showMessageDialog(null, "Cuenta eliminada");
     }
     
@@ -100,6 +116,7 @@ public class Operaciones {
     public String eliminarLibro(int isbn, String cat){
         NodoAVL nodo = categorias.buscar(cat, categorias.getRaiz());
         nodo.libros.eliminar(isbn);
+        data.add(operacionData.elimLibro(cat, isbn));
         int i = 0;
         while(i < categoriasUsuario.size()){
             if (categoriasUsuario.get(i).getCategoria().equals(cat)) {
@@ -133,7 +150,7 @@ public class Operaciones {
         return "Libro eliminado";
     }
     
-    //REPORTES
+    //--------------------------------------------------------------------------------------REPORTES-------------------------------------------------------------------------
     public void reportarCategorias(){
         archi.generarGraphviz("Categorias", categorias.dibujar());
         archi.generarGraphviz("CategoriasInOrden", categorias.dibujarRecorrido(categorias.inOrden(categorias.getRaiz())));
@@ -141,9 +158,10 @@ public class Operaciones {
         archi.generarGraphviz("CategoriasPostOrden", categorias.dibujarRecorrido(categorias.postOrder(categorias.getRaiz())));
     }
     
-    public void reportarUsuarios(){
+    public String reportarUsuarios(){
         String reporte = "digraph g{\n" + usuarios.dibujar() + "}";
         archi.generarGraphviz("Usuarios", reporte);
+        return "Reporte generado";
     }
     public String reportarLibro(String cat){
         NodoAVL categoria = categorias.buscar(cat, categorias.getRaiz());
@@ -155,7 +173,14 @@ public class Operaciones {
         return "No existe esa categoria";
     }
     
-    //busqueda de libros
+    public String reportarBloques(){
+        String dibujo = nodo.getBloques().dibujar();
+        if(nodo.getBloques().getPrimero() == null) return "No se han generado bloques";
+        archi.generarGraphviz("Bloques", dibujo);
+        return "Reporte generado";
+    }
+    
+    //--------------------------------------------------------------------------BUSQUEDA DE LIBROS--------------------------------------------------------------------------
     public void buscarPorTitulo(String tit){
         buscados.clear();
         int i = 0;
@@ -191,6 +216,7 @@ public class Operaciones {
         cat = "";
         buscarPorISBN(categorias.getRaiz(), isbn);
     }
+    
     public void buscarPorISBN(NodoAVL root,int isbn){
         if (root!= null) {
             librovisitado = root.libros.buscar(isbn);
@@ -198,5 +224,17 @@ public class Operaciones {
             if (librovisitado == null) buscarPorISBN(root.getIzq(), isbn);
             if (librovisitado == null) buscarPorISBN(root.getDer(), isbn);
         }
+    }
+    
+    public String generarBloque(){
+        if(!data.isEmpty() || data != null){
+            SimpleDateFormat d = new SimpleDateFormat("dd:MM:yy::HH:mm:ss");
+            nodo.getBloques().agregarBloque(d.format(new Date()),data.toString());
+            String msj = archi.guardarBloque(data.toJSONString(), "Bloque" + numbloque);
+            if(msj.equals("Bloque generado")) numbloque++;
+            data.clear();
+            return msj;
+        }
+        return "No se ha generado ninguna accion dentro de la biblioteca";
     }
 }

@@ -136,9 +136,9 @@ public class JPrincipal extends javax.swing.JFrame {
     private void jbtnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIngresoActionPerformed
         String msj = Operaciones.usuarios.loguear(Integer.parseInt(this.jtxtUsuario.getText()), this.jtxtpass.getText());
         if(msj.equals("")){
-            usuario.setUsuario(Operaciones.usuarios.buscar(Integer.parseInt(jtxtUsuario.getText())));
+            JUsuario.usuario = Operaciones.usuarios.buscar(Integer.parseInt(jtxtUsuario.getText()));
             usuario.setTitle("Biblioteca de " + usuario.getUsuario());
-            usuario.ops.llenarLibrosUsuario(Integer.parseInt(jtxtUsuario.getText()));
+            usuario.ops.llenarLibrosUsuario(JUsuario.usuario.getCarnet());
             usuario.crearCategoriasUsuario();
             usuario.crearCatBiblioteca();
             this.setVisible(false);

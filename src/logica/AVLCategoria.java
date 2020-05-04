@@ -58,7 +58,8 @@ public class AVLCategoria {
     
     public String dibujar(){
         String dibujo = "digraph g{\nnode[shape = circle];\n";
-        dibujo += dibujarAVL(raiz);
+        if(raiz.getIzq() == null && raiz.getDer() == null) dibujo += "\"" + raiz.getCategoria() + "\\nCantidad: " + raiz.libros.total + "\"";
+        else dibujo += dibujarAVL(raiz);
         dibujo += "}";
         return dibujo;
     }
@@ -188,7 +189,8 @@ public class AVLCategoria {
     public void buscarCatUsuarios(int carnet,ArrayList<LibrosUsuario> libUs, NodoAVL root){
         if(root!=null){
             libUs.add(new LibrosUsuario(root.getCategoria(), new ArrayList<>()));
-            root.libros.getRaiz().buscarCarnet(carnet, libUs.get(libUs.size()-1));
+            if(root.libros.getRaiz()!=null)root.libros.getRaiz().buscarCarnet(carnet, libUs.get(libUs.size()-1));
+            if(libUs.get(libUs.size()-1).getLibros().isEmpty()) libUs.remove(libUs.size()-1);
             buscarCatUsuarios(carnet, libUs, root.getIzq());
             buscarCatUsuarios(carnet, libUs, root.getDer());
         }
@@ -197,7 +199,7 @@ public class AVLCategoria {
     public void crearCategBiblioteca(ArrayList<LibrosUsuario> libUs, NodoAVL root){
         if(root!=null){
             libUs.add(new LibrosUsuario(root.getCategoria(), new ArrayList<>()));
-            root.libros.getRaiz().crearLibrosBiblioteca(libUs.get(libUs.size()-1));
+            if(root.libros.getRaiz()!= null)root.libros.getRaiz().crearLibrosBiblioteca(libUs.get(libUs.size()-1));
             crearCategBiblioteca(libUs, root.getIzq());
             crearCategBiblioteca(libUs, root.getDer());
         }

@@ -22,7 +22,6 @@ public class JUsuario extends javax.swing.JFrame {
     
     Operaciones ops = new Operaciones();
     
-    
     public JUsuario() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -63,10 +62,14 @@ public class JUsuario extends javax.swing.JFrame {
         reportarCat = new javax.swing.JMenuItem();
         reportarLibros = new javax.swing.JMenuItem();
         reporteUsuarios = new javax.swing.JMenuItem();
+        reportarNodo = new javax.swing.JMenuItem();
+        reportarRed = new javax.swing.JMenuItem();
         operacionesUsuario = new javax.swing.JMenu();
         logOut = new javax.swing.JMenuItem();
         actualizarDatos = new javax.swing.JMenuItem();
         eliminarCuenta = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        guardarBloque = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -262,6 +265,17 @@ public class JUsuario extends javax.swing.JFrame {
         });
         reportes.add(reporteUsuarios);
 
+        reportarNodo.setText("Bloques");
+        reportarNodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportarNodoActionPerformed(evt);
+            }
+        });
+        reportes.add(reportarNodo);
+
+        reportarRed.setText("Nodos");
+        reportes.add(reportarRed);
+
         jMenuBar1.add(reportes);
 
         operacionesUsuario.setText("Operaciones Usuario");
@@ -289,6 +303,17 @@ public class JUsuario extends javax.swing.JFrame {
             }
         });
         operacionesUsuario.add(eliminarCuenta);
+
+        jMenuItem1.setText("Configuracion Red");
+        operacionesUsuario.add(jMenuItem1);
+
+        guardarBloque.setText("Guardar Bloque");
+        guardarBloque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarBloqueActionPerformed(evt);
+            }
+        });
+        operacionesUsuario.add(guardarBloque);
 
         jMenuBar1.add(operacionesUsuario);
 
@@ -351,6 +376,7 @@ public class JUsuario extends javax.swing.JFrame {
     private void agregarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarCatActionPerformed
         String cat = JOptionPane.showInputDialog(null, "Nombre de la categoria a crear:");
         if (Operaciones.categorias.buscar(cat, Operaciones.categorias.getRaiz())== null) {
+                ops.data.add(ops.operacionData.operacionCategoria("CREAR_CATEGORIA",cat));
                 Operaciones.categorias.insertar(cat);
                 Operaciones.categoriasUsuario.add(new LibrosUsuario(cat, new ArrayList<>()));
                 Operaciones.categoriasBiblioteca.add(new LibrosUsuario(cat, new ArrayList<>()));
@@ -370,12 +396,11 @@ public class JUsuario extends javax.swing.JFrame {
 
     private void reportarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportarCatActionPerformed
         ops.reportarCategorias();
-        JOptionPane.showMessageDialog(null, "Reporte hecho");
+        JOptionPane.showMessageDialog(null, "Reporte generado");
     }//GEN-LAST:event_reportarCatActionPerformed
 
     private void reporteUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteUsuariosActionPerformed
-        ops.reportarUsuarios();
-        JOptionPane.showMessageDialog(null, "Reporte completado");
+        JOptionPane.showMessageDialog(null, ops.reportarUsuarios());
     }//GEN-LAST:event_reporteUsuariosActionPerformed
 
     private void reportarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportarLibrosActionPerformed
@@ -421,6 +446,8 @@ public class JUsuario extends javax.swing.JFrame {
             }
         }
         panelbusqueda.updateUI();
+        jtxtbisbn.setText("");
+        jtxtbtit.setText("");
     }//GEN-LAST:event_jbtnbbuscarActionPerformed
 
     private void jbtnbvbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbvbuscarActionPerformed
@@ -459,7 +486,19 @@ public class JUsuario extends javax.swing.JFrame {
             }
         }
         pbusquedav.updateUI();
+        jtxtbvisbn.setText("");
+        jtxtbvtit.setText("");
     }//GEN-LAST:event_jbtnbvbuscarActionPerformed
+
+    private void guardarBloqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarBloqueActionPerformed
+       String msj = ops.generarBloque();
+       JOptionPane.showMessageDialog(null, msj);
+    }//GEN-LAST:event_guardarBloqueActionPerformed
+
+    private void reportarNodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportarNodoActionPerformed
+        String msj = ops.reportarBloques();
+        JOptionPane.showMessageDialog(null, msj);
+    }//GEN-LAST:event_reportarNodoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -580,11 +619,13 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JMenuItem cargalibros;
     private javax.swing.JMenuItem eliminarCat;
     private javax.swing.JMenuItem eliminarCuenta;
+    private javax.swing.JMenuItem guardarBloque;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -604,6 +645,8 @@ public class JUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel pbusquedav;
     private javax.swing.JMenuItem reportarCat;
     private javax.swing.JMenuItem reportarLibros;
+    private javax.swing.JMenuItem reportarNodo;
+    private javax.swing.JMenuItem reportarRed;
     private javax.swing.JMenuItem reporteUsuarios;
     private javax.swing.JMenu reportes;
     // End of variables declaration//GEN-END:variables

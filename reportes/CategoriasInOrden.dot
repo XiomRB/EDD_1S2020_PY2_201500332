@@ -1,5 +1,5 @@
 digraph g{
 rankdir = LR;
 node[shape=box];
-"Animales\nCantidad: 0" -> "Consulta\nCantidad: 2" -> "Ensayo\nCantidad: 3" -> "Ficcion\nCantidad: 0" -> "Miedo\nCantidad: 0";
+"Accion\nCantidad: 0" -> "Consulta\nCantidad: 2" -> "Ensayo\nCantidad: 12";
 }

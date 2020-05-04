@@ -1,14 +1,16 @@
 package logica;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
 public class Archivo {
     
-    public void guardarArchivo(String contenido, String nombre){
-        File archivo = new File(System.getProperty("user.dir") + "\\reportes\\" + nombre + ".dot");
+    public void guardarArchivo(String contenido, String nombre,String carpeta,String extension){
+        File archivo = new File(System.getProperty("user.dir") + "\\" + carpeta + "\\" + nombre + extension);
         try{
             FileOutputStream reporte = new FileOutputStream(archivo);
             byte[] salida = contenido.getBytes();
@@ -18,7 +20,7 @@ public class Archivo {
     
     public void generarGraphviz(String nombre,String reporte){
         String d = System.getProperty("user.dir");
-        guardarArchivo(reporte, nombre);
+        guardarArchivo(reporte, nombre,"reportes", ".dot");
         String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";  
         String dot = "\"" + d + "\\reportes\\" + nombre + ".dot\"";
         String png = "\"" + d + "\\reportes\\" + nombre + ".png\"";
@@ -47,5 +49,15 @@ public class Archivo {
         return carpeta;
     }
     
+    public String guardarBloque(String data, String nombre){
+        
+            try {
+			FileWriter file = new FileWriter(System.getProperty("user.dir") + "\\Bloques\\"+ nombre);
+			file.write(data);
+			file.flush();
+			file.close();
+                        return "Bloque generado";
+		} catch (IOException e) {return "No se pudo guardar el bloque";}
+    }
     
 }
