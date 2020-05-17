@@ -16,6 +16,7 @@ public class JEliminarCategoria extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         comboCat.removeAllItems();
+        this.setTitle("Eliminar Categoria");
         for (int i = 0; i < Operaciones.categoriasUsuario.size(); i++) comboCat.addItem(Operaciones.categoriasUsuario.get(i).getCategoria());
         this.setLocationRelativeTo(parent);
     }

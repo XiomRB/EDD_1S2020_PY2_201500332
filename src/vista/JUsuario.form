@@ -92,6 +92,14 @@
                 <Property name="text" type="java.lang.String" value="Nodos"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mostrar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mostrar Reporte"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mostrarActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="operacionesUsuario">

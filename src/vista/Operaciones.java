@@ -34,6 +34,11 @@ public class Operaciones {
     private Archivo archi = new Archivo();
     public Data operacionData = new Data();
     
+    public String crearUsuario(int usuario,String nombre, String apellido,String carrera, String contrasena){
+        String msj = usuarios.insertar(usuario, nombre, apellido,carrera, contrasena);
+        if(msj.equals("Usuario agregado"))  data.add(operacionData.crearUs(usuario, nombre, apellido, carrera, contrasena));
+        return msj;
+    }
     
     public void cargarUsuarios(File archivo){//carga masiva de usuarios al sistema
         Object[][] users = carga.leerUsuario(archivo);
@@ -73,6 +78,9 @@ public class Operaciones {
             if (categoriasUsuario.get(j).getCategoria().equalsIgnoreCase(cat))break;
             j++;
         }
+        if(j == categoriasUsuario.size()){
+            categoriasUsuario.add(new LibrosUsuario(categoria.getCategoria(), new ArrayList<>()));
+        }
         msj = categoria.libros.insertar(isbn, tit, autor, edit, anio, ed, idioma, prop);
         if (msj.equals("Libro agregado")) {
             categoriasUsuario.get(j).setLibro(isbn, tit);
@@ -88,14 +96,15 @@ public class Operaciones {
     }
     
     public void eliminarCuenta(int cuenta){
-        for (int i = 0; i < categoriasUsuario.size(); i++) {
+        /*for (int i = 0; i < categoriasUsuario.size(); i++) {
             NodoAVL categoria = categorias.buscar(categoriasUsuario.get(i).getCategoria(), categorias.getRaiz());
             for (int j = 0; j < categoriasUsuario.get(i).getLibros().size(); j++) {
                 categoria.libros.eliminar(categoriasUsuario.get(i).getLibro(j).getIsbn()); //elimina de la biblioteca virtual, todos los libros pertenecientes a su cuenta
             }
-        }
+        }*/
         usuarios.eliminar(cuenta);
         data.add(operacionData.eliminUsuario(cuenta));
+        generarBloque();
         JOptionPane.showMessageDialog(null, "Cuenta eliminada");
     }
     
@@ -191,7 +200,9 @@ public class Operaciones {
                     encontrado.setCat(categoriasUsuario.get(i).getCategoria());
                     buscados.add(encontrado);
                 }
+                j++;
             }
+            i++;
         }
     }
     
@@ -206,7 +217,9 @@ public class Operaciones {
                     encontrado.setCat(categoriasBiblioteca.get(i).getCategoria());
                     buscados.add(encontrado);
                 }
+                j++;
             }
+            i++;
         }
     }
     

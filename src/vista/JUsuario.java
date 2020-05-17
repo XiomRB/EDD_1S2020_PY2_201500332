@@ -3,6 +3,7 @@ package vista;
 import blockchain.Servidor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,9 +11,12 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.beans.InvalidationListener;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -67,6 +71,7 @@ public class JUsuario extends javax.swing.JFrame{
         reporteUsuarios = new javax.swing.JMenuItem();
         reportarNodo = new javax.swing.JMenuItem();
         reportarRed = new javax.swing.JMenuItem();
+        mostrar = new javax.swing.JMenuItem();
         operacionesUsuario = new javax.swing.JMenu();
         logOut = new javax.swing.JMenuItem();
         actualizarDatos = new javax.swing.JMenuItem();
@@ -278,6 +283,14 @@ public class JUsuario extends javax.swing.JFrame{
 
         reportarRed.setText("Nodos");
         reportes.add(reportarRed);
+
+        mostrar.setText("Mostrar Reporte");
+        mostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mostrarActionPerformed(evt);
+            }
+        });
+        reportes.add(mostrar);
 
         jMenuBar1.add(reportes);
 
@@ -503,6 +516,23 @@ public class JUsuario extends javax.swing.JFrame{
         JOptionPane.showMessageDialog(null, msj);
     }//GEN-LAST:event_reportarNodoActionPerformed
 
+    private void mostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarActionPerformed
+        JFileChooser archi = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos PNG", "png");
+        archi.setCurrentDirectory(new File(System.getProperty("user.dir") + "\\reportes" ));
+        archi.setFileFilter(filtro);
+        if(archi.showDialog(null, "Mostrar Reporte") == JFileChooser.APPROVE_OPTION){
+            File img = archi.getSelectedFile();
+            JReporteImg rep = new JReporteImg(this, true, img.getName());
+            ImageIcon icon = new ImageIcon(img.toString());
+            Icon icono = icon;
+            JLabel lbimg = new JLabel(icono);
+            rep.jScrollPane1.add(lbimg);
+            rep.jScrollPane1.setViewportView(lbimg);
+            rep.setVisible(true);
+        }
+    }//GEN-LAST:event_mostrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -641,6 +671,7 @@ public class JUsuario extends javax.swing.JFrame{
     private javax.swing.JTextField jtxtbvtit;
     private javax.swing.JMenuItem logOut;
     public javax.swing.JTabbedPane miBiblioteca;
+    private javax.swing.JMenuItem mostrar;
     private javax.swing.JMenu operacionesLibro;
     private javax.swing.JMenu operacionesUsuario;
     private javax.swing.JPanel panelbusqueda;

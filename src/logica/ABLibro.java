@@ -118,9 +118,11 @@ public class ABLibro {
     
     public void eliminar(int isbn){
         eliminarNodo(raiz,isbn);
-        if(raiz.clavesactuales == 0){
+        if(raiz != null){
+            if(raiz.clavesactuales == 0 ){
             raiz = raiz.hijos[0];
             raiz.padre = null;
+            }
         }
         total--;
     }

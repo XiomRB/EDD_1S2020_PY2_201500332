@@ -19,6 +19,7 @@ public class ActualizarDatos extends javax.swing.JDialog {
     public ActualizarDatos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setTitle("Actualizacion Datos");
         lblCarnet.setText(String.valueOf(JUsuario.usuario.getCarnet()));
         this.jtxtApellido.setText(JUsuario.usuario.getApellido());
         this.jtxtCarrera.setText(JUsuario.usuario.getCarrera());

@@ -1,5 +1,0 @@
-digraph g{
- rankdir = LR;
-node [shape = box];
-"Indice: 0\nFecha: 04:05:20::15:11:49\nNonce: 34128\nPreviusHash: 0000\nHash: 0000358fb44ac27974d8521d09801a57a2dffb7026a08bdbe0988472b7ebc283" -> "Indice: 0\nFecha: 04:05:20::16:01:19\nNonce: 63038\nPreviusHash: 0000\nHash: 00003cfb4b0abf076ab47b2784d127d7b4516dc937eebd4632bfe86118685cc8""Indice: 0\nFecha: 04:05:20::16:01:19\nNonce: 63038\nPreviusHash: 0000\nHash: 00003cfb4b0abf076ab47b2784d127d7b4516dc937eebd4632bfe86118685cc8" -> "Indice: 0\nFecha: 04:05:20::16:03:10\nNonce: 21037\nPreviusHash: 0000\nHash: 00000e73a8049ec784537a35979f673139d5da935f4e71e9b49e6b68d9dd785d"
-}

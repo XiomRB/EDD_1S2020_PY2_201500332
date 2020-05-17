@@ -19,14 +19,14 @@ public class Data {
         return ob;
     }
     
-    public JSONArray eliminUsuario(int carnet){
+    public JSONObject eliminUsuario(int carnet){
         JSONObject ob = new JSONObject();
         JSONArray lista = new JSONArray();
         JSONObject accion = new JSONObject();
         accion.put("Carnet",carnet);
         lista.add(accion);
         ob.put("ELIMINAR_USUARIO", lista);
-        return lista;
+        return ob;
     }
     
     public JSONObject elimLibro(String cat, int isbn){

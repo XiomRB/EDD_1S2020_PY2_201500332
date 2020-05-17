@@ -11,6 +11,7 @@ public class JAgregarLibro extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(parent);
+        this.setTitle("Agregar Libro");
     }
 
     @SuppressWarnings("unchecked")
