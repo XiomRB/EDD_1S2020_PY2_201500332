@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 public class Archivo {
     
     public void guardarArchivo(String contenido, String nombre,String carpeta,String extension){
-        File archivo = new File(System.getProperty("user.dir") + "\\" + carpeta + "\\" + nombre + extension);
+        File archivo = new File("C:\\Users\\Oliveira Raymundo\\Documents\\gaby\\semestre6\\EDD20\\Lab\\Proyecto2EDD\\" + carpeta + "\\" + nombre + extension);
         try{
             FileOutputStream reporte = new FileOutputStream(archivo);
             byte[] salida = contenido.getBytes();
@@ -19,7 +19,7 @@ public class Archivo {
     }
     
     public void generarGraphviz(String nombre,String reporte){
-        String d = System.getProperty("user.dir");
+        String d = "C:\\Users\\Oliveira Raymundo\\Documents\\gaby\\semestre6\\EDD20\\Lab\\Proyecto2EDD";
         guardarArchivo(reporte, nombre,"reportes", ".dot");
         String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";  
         String dot = "\"" + d + "\\reportes\\" + nombre + ".dot\"";
@@ -52,7 +52,7 @@ public class Archivo {
     public String guardarBloque(String data, String nombre){
         
             try {
-			FileWriter file = new FileWriter(System.getProperty("user.dir") + "\\Bloques\\"+ nombre);
+			FileWriter file = new FileWriter( "C:\\Users\\Oliveira Raymundo\\Documents\\gaby\\semestre6\\EDD20\\Lab\\Proyecto2EDD\\Bloques\\"+ nombre);
 			file.write(data);
 			file.flush();
 			file.close();

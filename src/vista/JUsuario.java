@@ -482,7 +482,7 @@ public class JUsuario extends javax.swing.JFrame{
                     pbusquedav.add(btn);
             }else JOptionPane.showMessageDialog(null, "El libro buscado no existe ");
         }else if(!jtxtbvtit.getText().equals("")){
-            ops.buscarPorTitulo(jtxtbvtit.getText());
+            ops.buscarPorTituloBiblioteca(jtxtbvtit.getText());
             if (Operaciones.buscados.size() != 0) {
                 for (int i = 0; i < Operaciones.buscados.size(); i++) {
                     Book libronuevo = Operaciones.buscados.get(i);
@@ -519,12 +519,14 @@ public class JUsuario extends javax.swing.JFrame{
     private void mostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarActionPerformed
         JFileChooser archi = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos PNG", "png");
-        archi.setCurrentDirectory(new File(System.getProperty("user.dir") + "\\reportes" ));
+        archi.setCurrentDirectory(new File( "C:\\Users\\Oliveira Raymundo\\Documents\\gaby\\semestre6\\EDD20\\Lab\\Proyecto2EDD\\reportes" ));
         archi.setFileFilter(filtro);
         if(archi.showDialog(null, "Mostrar Reporte") == JFileChooser.APPROVE_OPTION){
             File img = archi.getSelectedFile();
             JReporteImg rep = new JReporteImg(this, true, img.getName());
             ImageIcon icon = new ImageIcon(img.toString());
+            icon.getImage().flush();
+            icon= new ImageIcon(img.toString());
             Icon icono = icon;
             JLabel lbimg = new JLabel(icono);
             rep.jScrollPane1.add(lbimg);

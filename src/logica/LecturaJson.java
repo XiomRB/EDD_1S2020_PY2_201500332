@@ -1,9 +1,11 @@
 package logica;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,10 +14,10 @@ import vista.Operaciones;
 
 public class LecturaJson {
     JSONParser parser = new JSONParser();
-    
     public JSONArray leerJson(File arch, String dato){
         try {
-            Object obj = parser.parse(new FileReader(arch));
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(arch), "utf-8"));
+            //Object obj = parser.parse(new FileReader(arch));
             JSONObject jsonob = (JSONObject) obj;
             JSONArray usuarios = (JSONArray)jsonob.get(dato);
             return usuarios;
@@ -64,7 +66,7 @@ public class LecturaJson {
     
     public void leerBloque(File arch){
         try {
-            Object obj = parser.parse(new FileReader(arch));
+            Object obj = parser.parse(new InputStreamReader(new FileInputStream(arch), "utf-8"));
             JSONObject jsonob = (JSONObject) obj;
             Operaciones.nodo.getBloques().añadirBloqueAnterior(Integer.parseInt(jsonob.get("INDEX").toString()), jsonob.get("TIMESTAMP").toString(), Integer.parseInt(jsonob.get("NONCE").toString()), jsonob.get("DATA").toString(), jsonob.get("PREVIUSHASH").toString(), jsonob.get("HASH").toString());
         } catch (FileNotFoundException e) {}
@@ -83,7 +85,8 @@ public class LecturaJson {
             if (crearUsuarios != null) {
                 for (int j = 0; j < crearUsuarios.size(); j++) {
                     JSONObject ob = (JSONObject) crearUsuarios.get(j);
-                    Operaciones.usuarios.insertar(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Contraseña").toString());                  
+                    
+                    Operaciones.usuarios.insertar(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Password").toString());                  
                 }
             }
             if (crearLibros != null) {
@@ -92,13 +95,13 @@ public class LecturaJson {
                     NodoAVL categoria  = Operaciones.categorias.buscar(ob.get("Categoria").toString(), Operaciones.categorias.getRaiz());
                     if (categoria == null)Operaciones.categorias.insertar(ob.get("Categoria").toString());
                     categoria = Operaciones.categorias.buscar(ob.get("Categoria").toString(), Operaciones.categorias.getRaiz());
-                    categoria.libros.insertar(Integer.parseInt(ob.get("ISBN").toString()), ob.get("Titulo").toString(), ob.get("Autor").toString(), ob.get("Editorial").toString(), Integer.parseInt(ob.get("Año").toString()), Integer.parseInt(ob.get("Edicion").toString()), ob.get("Idioma").toString(), Integer.parseInt(ob.get("Carnet").toString()));
+                    categoria.libros.insertar(Integer.parseInt(ob.get("ISBN").toString()), ob.get("Titulo").toString(), ob.get("Autor").toString(), ob.get("Editorial").toString(), Integer.parseInt(ob.get("Anio").toString()) , Integer.parseInt(ob.get("Edicion").toString()), ob.get("Idioma").toString(), Integer.parseInt(ob.get("Carnet").toString()));
                 }
             }
             if (editarUsuarios != null) {
                 for (int j = 0; j < editarUsuarios.size(); j++) {
                     JSONObject ob = (JSONObject) editarUsuarios.get(j);
-                    Operaciones.usuarios.modificarUsuario(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Contraseña").toString());
+                    Operaciones.usuarios.modificarUsuario(Integer.parseInt(ob.get("Carnet").toString()), ob.get("Nombre").toString(), ob.get("Apellido").toString(), ob.get("Carrera").toString(), ob.get("Password").toString());
                 }
             }
             if (crearCateg != null) {

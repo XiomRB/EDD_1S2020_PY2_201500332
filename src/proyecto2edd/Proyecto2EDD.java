@@ -11,7 +11,7 @@ public class Proyecto2EDD {
 
     public static void main(String[] args) {
         LecturaJson arch = new LecturaJson();
-        File bloques = new File(System.getProperty("user.dir") + "\\Bloques");
+        File bloques = new File( "C:\\Users\\Oliveira Raymundo\\Documents\\gaby\\semestre6\\EDD20\\Lab\\Proyecto2EDD\\Bloques");
         if (bloques.exists()) {
             if(bloques.isDirectory()){
                 File[] archivos = bloques.listFiles();

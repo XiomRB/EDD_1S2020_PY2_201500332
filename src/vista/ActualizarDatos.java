@@ -142,7 +142,7 @@ public class ActualizarDatos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnActualizarActionPerformed
-        String msj = Operaciones.usuarios.modificarUsuario(Integer.parseInt(lblCarnet.getText()), this.jtxtNombre.getText(), this.jtxtApellido.getText(), this.jtxtCarrera.getText(), this.jtxtPass.getText());
+        String msj = JPrincipal.usuario.ops.editarCuenta(Integer.parseInt(lblCarnet.getText()), this.jtxtNombre.getText(), this.jtxtApellido.getText(), this.jtxtCarrera.getText(), this.jtxtPass.getText());
         JPrincipal.usuario.setUsuario(Operaciones.usuarios.buscar(Integer.parseInt(lblCarnet.getText())));
         JPrincipal.usuario.setTitle(JPrincipal.usuario.getUsuario());
         JOptionPane.showMessageDialog(null, "Biblioteca de " + msj);

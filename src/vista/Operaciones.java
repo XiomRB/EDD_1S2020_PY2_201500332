@@ -95,6 +95,12 @@ public class Operaciones {
         return msj;
     }
     
+    public String editarCuenta(int carnet,String nombre, String apellido, String carrera, String pass){
+        String msj =usuarios.modificarUsuario(carnet,nombre,apellido,carrera,pass);
+        data.add(operacionData.editarUs(carnet, nombre, apellido, carrera,pass));
+        return msj;
+    }
+    
     public void eliminarCuenta(int cuenta){
         /*for (int i = 0; i < categoriasUsuario.size(); i++) {
             NodoAVL categoria = categorias.buscar(categoriasUsuario.get(i).getCategoria(), categorias.getRaiz());

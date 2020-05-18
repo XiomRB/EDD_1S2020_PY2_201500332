@@ -9,13 +9,27 @@ public class Data {
         JSONObject ob = new JSONObject();
         JSONArray lista = new JSONArray();
         JSONObject usuario = new JSONObject();
-        usuario.put("Contraseña",contraseña);
+        usuario.put("Password",contraseña);
         usuario.put("Carrera", carrera);
         usuario.put("Apellido",apellido);
         usuario.put("Nombre", nombre);
         usuario.put("Carnet",carnet);
         lista.add(usuario);
         ob.put("CREAR_USUARIO", lista);
+        return ob;
+    }
+    
+     public JSONObject editarUs(int carnet, String nombre, String apellido,String carrera,String contraseña){
+        JSONObject ob = new JSONObject();
+        JSONArray lista = new JSONArray();
+        JSONObject usuario = new JSONObject();
+        usuario.put("Password",contraseña);
+        usuario.put("Carrera", carrera);
+        usuario.put("Apellido",apellido);
+        usuario.put("Nombre", nombre);
+        usuario.put("Carnet",carnet);
+        lista.add(usuario);
+        ob.put("EDITAR_USUARIO", lista);
         return ob;
     }
     
@@ -49,7 +63,7 @@ public class Data {
         libro.put("Autor", autor);
         libro.put("Editorial",editorial);
         libro.put("Edicion", ed);
-        libro.put("Año",anio);
+        libro.put("Anio",anio);
         libro.put("Idioma",idioma);
         libro.put("Carnet", carnet);
         libro.put("Categoria",categoria);
